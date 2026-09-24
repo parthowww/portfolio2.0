@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parthasarathi Adhikary — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F6F4EF;
+    --surface: #FFFFFF;
+    --surface-2: #EFECE3;
+    --line: rgba(27,31,39,0.10);
+    --line-strong: rgba(27,31,39,0.20);
+    --text: #1B1F27;
+    --text-dim: #666B76;
+    --accent: #9A6E1E;
+    --accent-soft: rgba(154,110,30,0.10);
+    --up: #2F6B4F;
+    --down: #8B3A3A;
+    --serif: 'Newsreader', serif;
+    --sans: 'Inter', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; background: var(--bg); }
+  body{
+    margin:0;
+    background: transparent;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  #bgCanvas{
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    display: block;
+  }
+  a{ color: inherit; }
+  ::selection{ background: var(--accent-soft); color: var(--text); }
+
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .wrap{
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* SCROLL-SCRUBBED REVEAL — progress (--p, 0→1) is written by JS on every scroll frame,
+     so scrolling up/down scrubs the motion directly like a video timeline, not a one-shot trigger. */
+  .reveal{
+    --p: 0;
+    opacity: var(--p);
+    transform: translateY(calc((1 - var(--p)) * -46px)) scale(calc(0.97 + var(--p) * 0.03));
+    filter: blur(calc((1 - var(--p)) * 6px));
+    transition: transform .09s linear, opacity .09s linear, filter .09s linear;
+    will-change: transform, opacity, filter;
+  }
+  .reveal-stagger > *{
+    --p: 0;
+    opacity: var(--p);
+    transform: translateY(calc((1 - var(--p)) * -38px)) scale(calc(0.97 + var(--p) * 0.03));
+    filter: blur(calc((1 - var(--p)) * 5px));
+    transition: transform .09s linear, opacity .09s linear, filter .09s linear;
+    will-change: transform, opacity, filter;
+  }
+  /* hero gets a cinematic pull-back as you start scrolling past it */
+  .hero{
+    --hp: 0;
+    transform: translateY(calc(var(--hp) * -30px));
+    opacity: calc(1 - var(--hp) * 0.55);
+    filter: blur(calc(var(--hp) * 2px));
+    transition: transform .09s linear, opacity .09s linear, filter .09s linear;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .reveal, .reveal-stagger > *, .hero{
+      transition: none !important;
+      transform: none !important;
+      opacity: 1 !important;
+      filter: none !important;
+    }
+  }
+
+  /* NAV */
+  header.nav{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(246,244,239,0.88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner{
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .nav-mark{
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+  .nav-links{
+    display:flex;
+    gap: 24px;
+    list-style:none;
+    margin:0; padding:0;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    overflow-x: auto;
+  }
+  .nav-links a{
+    text-decoration:none;
+    color: var(--text-dim);
+    white-space: nowrap;
+    transition: color .15s ease;
+  }
+  .nav-links a:hover{ color: var(--accent); }
+
+  /* HERO */
+  .hero{
+    padding: 100px 0 50px;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 20px;
+    font-weight: 600;
+  }
+  h1.name{
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(44px, 6.5vw, 74px);
+    line-height: 1.03;
+    margin: 0 0 20px;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .role-line{
+    font-family: var(--mono);
+    font-size: 15.5px;
+    color: var(--text-dim);
+    margin: 0 0 10px;
+    letter-spacing: 0.01em;
+  }
+  .role-line.status{ margin-bottom: 30px; }
+  .role-line .sep{ color: var(--line-strong); margin: 0 10px; }
+  .thesis{
+    font-size: 21px;
+    max-width: 660px;
+    color: var(--text);
+    margin: 0 0 34px;
+  }
+  .hero-cta{
+    display:flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn{
+    font-family: var(--mono);
+    font-size: 13.5px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    padding: 12px 20px;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    color: var(--text);
+    transition: border-color .15s ease, background .15s ease, transform .15s ease;
+    display: inline-block;
+  }
+  .btn:hover{ border-color: var(--accent); background: var(--accent-soft); transform: translateY(-1px); }
+  .btn.primary{
+    background: var(--accent);
+    color: #FFFDF8;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .btn.primary:hover{ opacity: .92; background: var(--accent); }
+
+  /* SECTION shared */
+  section{
+    padding: 84px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .sec-head{
+    display:flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 44px;
+    gap: 20px;
+  }
+  .sec-label{
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  h2.sec-title{
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(28px, 3.6vw, 37px);
+    margin: 8px 0 0;
+    color: var(--text);
+  }
+
+  /* THESIS / SUMMARY */
+  .thesis-body p{
+    font-size: 18.5px;
+    max-width: 720px;
+    color: var(--text);
+    margin: 0 0 18px;
+  }
+  .thesis-body p:last-child{ margin-bottom: 0; }
+
+  /* METRICS */
+  .metrics-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .metric{
+    background: var(--surface);
+    padding: 28px 24px;
+  }
+  .metric .num{
+    font-family: var(--mono);
+    font-size: clamp(28px, 3.6vw, 38px);
+    color: var(--accent);
+    font-weight: 600;
+    line-height: 1;
+  }
+  .metric .label{
+    margin-top: 12px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+    letter-spacing: 0.02em;
+  }
+  @media (max-width: 720px){
+    .metrics-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* HOLDINGS / PROJECTS */
+  .holdings-grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  @media (max-width: 780px){
+    .holdings-grid{ grid-template-columns: 1fr; }
+  }
+  .holding{
+    background: var(--surface);
+    padding: 30px 28px;
+    display:flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: box-shadow .2s ease, transform .2s ease;
+  }
+  .holding:hover{ box-shadow: inset 0 0 0 1px var(--accent-soft); }
+  .holding-top{
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .holding-sym{
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .spark{ display:block; }
+  .spark path{
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .holding h3{
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 22px;
+    margin: 0;
+    color: var(--text);
+  }
+  .holding .tag{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .holding ul{
+    margin: 4px 0 0;
+    padding-left: 19px;
+    color: var(--text-dim);
+    font-size: 15.5px;
+  }
+  .holding ul li{ margin-bottom: 7px; }
+  .holding ul li::marker{ color: var(--accent); }
+  .stack-tags{
+    display:flex; flex-wrap: wrap; gap: 8px;
+    margin-top: auto;
+    padding-top: 6px;
+  }
+  .stack-tags span{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    border: 1px solid var(--line-strong);
+    padding: 4px 9px;
+    border-radius: 2px;
+  }
+  .badge-live{
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--up);
+    border: 1px solid var(--up);
+    padding: 3px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  /* POSITIONS / SKILLS */
+  .book{
+    border: 1px solid var(--line);
+  }
+  .book-row{
+    display:grid;
+    grid-template-columns: 230px 1fr;
+    border-bottom: 1px solid var(--line);
+  }
+  .book-row:last-child{ border-bottom: none; }
+  .book-cat{
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 22px 24px;
+    background: var(--surface-2);
+    border-right: 1px solid var(--line);
+  }
+  .book-items{
+    padding: 20px 24px;
+    display:flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-content: center;
+    background: var(--surface);
+  }
+  .book-items span{
+    font-size: 15px;
+    color: var(--text);
+    padding: 7px 13px;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+  }
+  @media (max-width: 640px){
+    .book-row{ grid-template-columns: 1fr; }
+    .book-cat{ border-right: none; border-bottom: 1px solid var(--line); }
+  }
+
+  /* EDUCATION */
+  .edu-list{ display:flex; flex-direction: column; gap: 0; }
+  .edu-item{
+    display:grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .edu-item:last-child{ border-bottom: none; }
+  .edu-item h3{
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 21px;
+    margin: 0 0 5px;
+    color: var(--text);
+  }
+  .edu-item .school{ color: var(--text-dim); font-size: 15.5px; }
+  .edu-item .when{
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-dim);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .edu-scores{
+    margin-top: 12px;
+    display:flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .edu-scores span{
+    font-family: var(--mono);
+    font-size: 13.5px;
+    color: var(--accent);
+  }
+  .edu-scores span em{ color: var(--text-dim); font-style: normal; margin-right: 6px; }
+
+  /* COURSEWORK */
+  .course-list{
+    columns: 2;
+    column-gap: 44px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .course-list li{
+    font-size: 15.5px;
+    color: var(--text);
+    padding: 11px 0;
+    border-bottom: 1px solid var(--line);
+    break-inside: avoid;
+  }
+  .course-list li .sub{ display:block; color: var(--text-dim); font-size: 13.5px; margin-top: 2px; }
+  @media (max-width: 640px){ .course-list{ columns: 1; } }
+
+  .lang-row{
+    margin-top: 32px;
+    display:flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .lang-row .lang{
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+  .lang-row .lang b{ color: var(--text); }
+
+  /* CONTACT / FOOTER */
+  footer{
+    padding: 74px 0 64px;
+  }
+  .contact-grid{
+    display:grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 40px;
+  }
+  @media (max-width: 720px){ .contact-grid{ grid-template-columns: 1fr; } }
+  .contact-lines a{
+    display:block;
+    font-family: var(--mono);
+    font-size: 16px;
+    color: var(--text);
+    text-decoration: none;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line);
+    transition: color .15s ease;
+  }
+  .contact-lines a:hover{ color: var(--accent); }
+  .foot-note{
+    font-size: 14.5px;
+    color: var(--text-dim);
+    max-width: 320px;
+  }
+  .foot-bottom{
+    margin-top: 52px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text-dim);
+    display:flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+</style>
+</head>
+<body>
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="#top">PA · LEDGER</a>
+    <ul class="nav-links">
+      <li><a href="#thesis">Thesis</a></li>
+      <li><a href="#metrics">Metrics</a></li>
+      <li><a href="#holdings">Holdings</a></li>
+      <li><a href="#positions">Positions</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="wrap hero reveal-stagger" id="heroBlock">
+    <p class="eyebrow">Portfolio · FY2026</p>
+    <h1 class="name">Parthasarathi&nbsp;Adhikary</h1>
+    <p class="role-line">B.Tech CSE, SRMIST Chennai<span class="sep">/</span>Kolkata, WB<span class="sep">/</span>Long Investment Banking &amp; Quant Research</p>
+    <p class="role-line status">Currently building at <strong style="color:var(--text);">Xenodochy</strong> <span style="color:var(--text-dim);">— founding-team member, unpaid</span> · Participated in <strong style="color:var(--text);">Smart India Hackathon 2026</strong></p>
+    <p class="thesis">I build things at the intersection of machine learning and market behavior — then check my own work hard enough to find the bug before someone else does.</p>
+    <div class="hero-cta">
+      <a class="btn primary" href="mailto:parthasarathiadhikary2812@gmail.com">Email me</a>
+      <a class="btn" href="#holdings">View holdings</a>
+      <a class="btn" href="https://www.linkedin.com/in/parthasarathiadhikary2006" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section id="thesis" class="reveal">
+      <div class="sec-head">
+        <div><p class="sec-label">01 — Summary</p><h2 class="sec-title">The thesis</h2></div>
+      </div>
+      <div class="thesis-body">
+        <p>Second-year Computer Science Engineering student at SRMIST Chennai with a quantitative and analytical focus spanning machine learning, statistics, and applied finance.</p>
+        <p>Proven ability to design, debug, and validate ML pipelines end-to-end — including diagnosing subtle methodology errors such as data leakage. Builds projects at the intersection of technology and finance, from behavioral micro-investing to market-trend prediction, backed by foundational programming, UI/UX, and rapid-prototyping skills.</p>
+        <p>Looking to apply this blend of technical rigor and financial reasoning in real-world, deadline-driven settings.</p>
+      </div>
+    </section>
+
+    <section id="metrics" class="reveal">
+      <div class="sec-head">
+        <div><p class="sec-label">02 — Academic record</p><h2 class="sec-title">Metrics</h2></div>
+      </div>
+      <div class="metrics-grid reveal-stagger reveal">
+        <div class="metric"><div class="num">9.23</div><div class="label">Semester 1 GPA</div></div>
+        <div class="metric"><div class="num">8.91</div><div class="label">Semester 2 GPA</div></div>
+        <div class="metric"><div class="num">9.07</div><div class="label">Cumulative CGPA</div></div>
+        <div class="metric"><div class="num">2028</div><div class="label">Expected graduation</div></div>
+      </div>
+    </section>
+
+    <section id="holdings" class="reveal">
+      <div class="sec-head">
+        <div><p class="sec-label">03 — Positions taken</p><h2 class="sec-title">Holdings</h2></div>
+      </div>
+      <div class="holdings-grid reveal-stagger reveal">
+
+        <div class="holding" style="border-left:2px solid var(--accent);">
+          <div class="holding-top">
+            <span class="holding-sym">XNDC · Live</span>
+            <span class="badge-live">IN PROGRESS</span>
+          </div>
+          <span class="tag">Founding Team · Unpaid</span>
+          <h3>Xenodochy</h3>
+          <p class="tag" style="text-transform:none; color:var(--text-dim); font-size:15px;">A holding-company concept built with friends — the Alphabet to our Google: an umbrella structure meant to sit above a portfolio of future ventures rather than run a single product.</p>
+          <ul>
+            <li>Founding-team member, currently unpaid</li>
+            <li>Still early-stage and actively evolving</li>
+          </ul>
+        </div>
+
+        <div class="holding" style="border-left:2px solid var(--accent);">
+          <div class="holding-top">
+            <span class="holding-sym">SIH26 · Live</span>
+            <span class="badge-live">IN PROGRESS</span>
+          </div>
+          <span class="tag">Smart India Hackathon 2026</span>
+          <h3>Safara — Tourist Safety System</h3>
+          <p class="tag" style="text-transform:none; color:var(--text-dim); font-size:15px;">A tourist safety monitoring system with DID-based digital identity, geo-fencing, and a blockchain audit ledger, built for SIH 2026.</p>
+          <ul>
+            <li>Handling backend development and business strategy for the team</li>
+            <li>PWA frontend, currently in prototype development</li>
+          </ul>
+        </div>
+
+        <div class="holding">
+          <div class="holding-top">
+            <span class="holding-sym">NDGV · 2026</span>
+            <svg class="spark" width="70" height="24" viewBox="0 0 70 24"><path d="M0,18 L10,16 L20,17 L30,9 L40,11 L50,5 L60,6 L70,2" stroke="var(--up)"/></svg>
+          </div>
+          <span class="tag">Fintech · Concept &amp; Pitch</span>
+          <h3>NudgeVest</h3>
+          <p class="tag" style="text-transform:none; color:var(--text-dim); font-size:15px;">Behavioral micro-investing platform combining loss-aversion and temporal-discounting framing with ML-driven personalization.</p>
+          <ul>
+            <li>Contextual bandits and Thompson Sampling for adaptive nudging</li>
+            <li>XGBoost / LightGBM with SMOTE for user propensity modeling</li>
+            <li>Monte Carlo simulation and CAGR backtesting against the Nifty 50</li>
+          </ul>
+          <div class="stack-tags"><span>Python</span><span>XGBoost</span><span>Monte Carlo</span></div>
+        </div>
+
+        <div class="holding">
+          <div class="holding-top">
+            <span class="holding-sym">TTNC · 2026</span>
+            <svg class="spark" width="70" height="24" viewBox="0 0 70 24"><path d="M0,4 L10,14 L20,8 L30,18 L40,12 L50,7 L60,10 L70,3" stroke="var(--accent)"/></svg>
+          </div>
+          <span class="tag">Kaggle · ML Pipeline</span>
+          <h3>Titanic Survival Prediction</h3>
+          <p class="tag" style="text-transform:none; color:var(--text-dim); font-size:15px;">Full ML pipeline with feature engineering, including a custom Family Survival feature.</p>
+          <ul>
+            <li>Logistic Regression, SVM, and Random Forest ensemble</li>
+            <li>Found and fixed a data leakage flaw in cross-validation</li>
+            <li>Replaced naive random splits with group-aware splits on family/ticket clusters</li>
+          </ul>
+          <div class="stack-tags"><span>scikit-learn</span><span>Ensembling</span><span>CV Design</span></div>
+        </div>
+
+        <div class="holding">
+          <div class="holding-top">
+            <span class="holding-sym">STKP · 2026</span>
+            <svg class="spark" width="70" height="24" viewBox="0 0 70 24"><path d="M0,10 L10,6 L20,12 L30,8 L40,14 L50,9 L60,4 L70,7" stroke="var(--up)"/></svg>
+          </div>
+          <span class="tag">Banking &amp; Finance</span>
+          <h3>StockPulse</h3>
+          <p class="tag" style="text-transform:none; color:var(--text-dim); font-size:15px;">Pattern-based ML and regression model built to identify stock market trends.</p>
+          <ul>
+            <li>Prototyped with Google AI Studio, VS Code, and Figma</li>
+            <li>Regression-driven trend identification on market data</li>
+          </ul>
+          <div class="stack-tags"><span>Regression</span><span>Figma</span><span>Prototyping</span></div>
+        </div>
+
+        <div class="holding">
+          <div class="holding-top">
+            <span class="holding-sym">ELDR · Healthcare</span>
+            <svg class="spark" width="70" height="24" viewBox="0 0 70 24"><path d="M0,12 L10,11 L20,13 L30,10 L40,12 L50,9 L60,11 L70,8" stroke="var(--text-dim)"/></svg>
+          </div>
+          <span class="tag">Assistive AI</span>
+          <h3>ElderlyAI</h3>
+          <p class="tag" style="text-transform:none; color:var(--text-dim); font-size:15px;">Assistive AI tool prototyped for medical monitoring and support of senior citizens.</p>
+          <ul>
+            <li>Built on Replit and Antigravity</li>
+          </ul>
+          <div class="stack-tags"><span>Replit</span><span>Antigravity</span></div>
+        </div>
+
+        <div class="holding">
+          <div class="holding-top">
+            <span class="holding-sym">MCBL · Healthcare</span>
+            <svg class="spark" width="70" height="24" viewBox="0 0 70 24"><path d="M0,14 L10,13 L20,15 L30,11 L40,12 L50,8 L60,9 L70,6" stroke="var(--text-dim)"/></svg>
+          </div>
+          <span class="tag">Ops &amp; Billing</span>
+          <h3>MedicareAI</h3>
+          <p class="tag" style="text-transform:none; color:var(--text-dim); font-size:15px;">Streamlined hospital billing workflow concept aimed at cutting administrative overhead.</p>
+          <ul>
+            <li>Workflow design for billing efficiency</li>
+          </ul>
+          <div class="stack-tags"><span>Systems Design</span></div>
+        </div>
+
+        <div class="holding">
+          <div class="holding-top">
+            <span class="holding-sym">PAIA · Education</span>
+            <svg class="spark" width="70" height="24" viewBox="0 0 70 24"><path d="M0,15 L10,12 L20,13 L30,9 L40,10 L50,6 L60,7 L70,4" stroke="var(--accent)"/></svg>
+          </div>
+          <span class="tag">Self-Directed Learning</span>
+          <h3>Personal AI Assistant</h3>
+          <p class="tag" style="text-transform:none; color:var(--text-dim); font-size:15px;">Personal-use AI assistant built to support independent study.</p>
+          <ul>
+            <li>Built on Google AI Studio</li>
+          </ul>
+          <div class="stack-tags"><span>Google AI Studio</span></div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="positions" class="reveal">
+      <div class="sec-head">
+        <div><p class="sec-label">04 — Order book</p><h2 class="sec-title">Positions</h2></div>
+      </div>
+      <div class="book">
+        <div class="book-row">
+          <div class="book-cat">Programming</div>
+          <div class="book-items"><span>Python</span><span>C</span><span>C++</span></div>
+        </div>
+        <div class="book-row">
+          <div class="book-cat">ML &amp; Statistics</div>
+          <div class="book-items"><span>scikit-learn</span><span>XGBoost / LightGBM</span><span>Ensemble methods</span><span>Cross-validation design</span><span>Probability &amp; statistics for ML</span></div>
+        </div>
+        <div class="book-row">
+          <div class="book-cat">Applied Finance</div>
+          <div class="book-items"><span>Monte Carlo simulation</span><span>CAGR / backtesting</span><span>Portfolio strategy fundamentals</span><span>Excel-based modeling</span></div>
+        </div>
+        <div class="book-row">
+          <div class="book-cat">Web &amp; Design</div>
+          <div class="book-items"><span>HTML</span><span>CSS</span><span>UI/UX in Figma</span></div>
+        </div>
+        <div class="book-row">
+          <div class="book-cat">Rapid Prototyping</div>
+          <div class="book-items"><span>Google AI Studio</span><span>Replit</span><span>Claude</span><span>Antigravity</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="education" class="reveal">
+      <div class="sec-head">
+        <div><p class="sec-label">05 — Institutional record</p><h2 class="sec-title">Education</h2></div>
+      </div>
+      <div class="edu-list">
+        <div class="edu-item">
+          <div>
+            <h3>B.Tech, Computer Science Engineering</h3>
+            <div class="school">SRM Institute of Science and Technology, Chennai — 2nd Year, 3rd Semester</div>
+            <div class="edu-scores">
+              <span><em>Sem 1</em>9.23</span>
+              <span><em>Sem 2</em>8.91</span>
+              <span><em>CGPA</em>9.07</span>
+            </div>
+          </div>
+          <div class="when">Expected May 2028</div>
+        </div>
+        <div class="edu-item">
+          <div>
+            <h3>CBSE Senior Secondary (Class XII)</h3>
+            <div class="school">Delhi Public School, Ruby Park, Kolkata</div>
+          </div>
+          <div class="when">April 2025</div>
+        </div>
+        <div class="edu-item">
+          <div>
+            <h3>CBSE Secondary (Class X)</h3>
+            <div class="school">Delhi Public School, Ruby Park, Kolkata</div>
+          </div>
+          <div class="when">April 2023</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="coursework" class="reveal" style="border-bottom:none;">
+      <div class="sec-head">
+        <div><p class="sec-label">06 — Additional filings</p><h2 class="sec-title">Coursework &amp; hackathons</h2></div>
+      </div>
+      <ul class="course-list">
+        <li>Advanced UI/UX Workshop <span class="sub">TEXUS 2026, SRMIST Ramapuram</span></li>
+        <li>Advanced UI/UX Applications <span class="sub">Dezprox</span></li>
+        <li>Hackathon Participant <span class="sub">Pratyusha College of Engineering</span></li>
+        <li>Smart India Hackathon 2026 <span class="sub">SIH25002 — Safara, tourist safety system</span></li>
+        <li>Introduction to Artificial Intelligence <span class="sub">IBM SkillsBuild</span></li>
+        <li>Python using AI <span class="sub">AI for Techies</span></li>
+        <li>Probability &amp; Statistics for Machine Learning and Data Science <span class="sub">DeepLearn.AI</span></li>
+        <li>Applications of Nanotechnology <span class="sub">TEXUS 2026, SRMIST Ramapuram</span></li>
+      </ul>
+      <div class="lang-row">
+        <span class="lang"><b>English</b> — C2</span>
+        <span class="lang"><b>Bengali</b> — C2</span>
+        <span class="lang"><b>Hindi</b> — C2</span>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="wrap">
+    <footer id="contact" class="reveal">
+      <div class="sec-head">
+        <div><p class="sec-label">07 — Settlement</p><h2 class="sec-title">Contact</h2></div>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-lines">
+          <a href="mailto:parthasarathiadhikary2812@gmail.com">parthasarathiadhikary2812@gmail.com</a>
+          <a href="tel:+917044395904">+91 70443 95904</a>
+          <a href="https://www.linkedin.com/in/parthasarathiadhikary2006" target="_blank" rel="noopener">linkedin.com/in/parthasarathiadhikary2006 ↗</a>
+        </div>
+        <p class="foot-note">Based in Kolkata, WB (permanent) · Chennai, TN (education). Currently a founding-team member at Xenodochy (unpaid) and a participant in Smart India Hackathon 2026, alongside coursework. Open to internships and analyst-track roles in investment banking and quantitative research.</p>
+      </div>
+      <div class="foot-bottom">
+        <span>PARTHASARATHI ADHIKARY</span>
+        <span>PORTFOLIO — LAST UPDATED 2026</span>
+      </div>
+    </footer>
+  </div>
+
+</main>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- Background canvas: a generative scene scrubbed directly by scroll position ----
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, DPR;
+
+  function resizeCanvas(){
+    DPR = window.devicePixelRatio || 1;
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W * DPR; canvas.height = H * DPR;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  // deterministic organic "price line" — same shape every load, scrubbed by scroll
+  const N = 260;
+  const dataY = Array.from({ length: N }, (_, i) =>
+    Math.sin(i * 0.15) * 22 + Math.sin(i * 0.045) * 34 + Math.sin(i * 0.32) * 9 + Math.sin(i * 0.008) * 40
+  );
+
+  function drawScene(frac){
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#F6F4EF';
+    ctx.fillRect(0, 0, W, H);
+
+    // drifting parallax grid
+    ctx.strokeStyle = 'rgba(27,31,39,0.05)';
+    ctx.lineWidth = 1;
+    const spacing = 90;
+    const gOffset = (frac * 900) % spacing;
+    for (let x = -gOffset; x < W; x += spacing){
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    }
+
+    // chart line sweeping through the dataset as you scroll — the "video" motion
+    const visible = 90;
+    const maxOffset = N - visible;
+    const offset = frac * maxOffset;
+    const base = Math.floor(offset);
+    const blend = offset - base;
+
+    ctx.beginPath();
+    for (let i = 0; i < visible; i++){
+      const idx = Math.min(base + i, N - 1);
+      const idxN = Math.min(idx + 1, N - 1);
+      const y = dataY[idx] * (1 - blend) + dataY[idxN] * blend;
+      const x = (i / (visible - 1)) * W;
+      const yPos = H * 0.6 + y * 2.4 + Math.sin(frac * 8 + i * 0.2) * 4;
+      i === 0 ? ctx.moveTo(x, yPos) : ctx.lineTo(x, yPos);
+    }
+    ctx.strokeStyle = 'rgba(154,110,30,0.28)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // two soft light blooms drifting on independent paths
+    const bx = W * 0.15 + frac * W * 0.7;
+    const by = H * 0.25 + Math.sin(frac * 6) * H * 0.15;
+    const g1 = ctx.createRadialGradient(bx, by, 0, bx, by, 260);
+    g1.addColorStop(0, 'rgba(154,110,30,0.10)');
+    g1.addColorStop(1, 'rgba(154,110,30,0)');
+    ctx.fillStyle = g1;
+    ctx.beginPath(); ctx.arc(bx, by, 260, 0, Math.PI * 2); ctx.fill();
+
+    const bx2 = W * 0.9 - frac * W * 0.6;
+    const by2 = H * 0.7 - Math.sin(frac * 5) * H * 0.2;
+    const g2 = ctx.createRadialGradient(bx2, by2, 0, bx2, by2, 220);
+    g2.addColorStop(0, 'rgba(47,107,79,0.08)');
+    g2.addColorStop(1, 'rgba(47,107,79,0)');
+    ctx.fillStyle = g2;
+    ctx.beginPath(); ctx.arc(bx2, by2, 220, 0, Math.PI * 2); ctx.fill();
+  }
+
+  function scrollFraction(){
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    return max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
+  }
+
+  if (reduceMotion){
+    drawScene(0); // static single frame, no motion wiring
+  }
+
+  if (!reduceMotion){
+
+    // ---- Hero: one-shot cinematic entrance on load, staggered per child ----
+    const heroChildren = Array.from(document.querySelectorAll('#heroBlock.reveal-stagger > *'));
+    function easeOutExpo(t){ return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+
+    function tweenHero(){
+      const duration = 900;
+      const staggerGap = 90;
+      const startTime = performance.now();
+
+      function frame(now){
+        let stillGoing = false;
+        heroChildren.forEach((el, i) => {
+          const localStart = i * staggerGap;
+          const t = Math.min(Math.max((now - startTime - localStart) / duration, 0), 1);
+          if (t < 1) stillGoing = true;
+          el.style.setProperty('--p', easeOutExpo(t));
+        });
+        if (stillGoing) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+    window.addEventListener('load', tweenHero);
+    if (document.readyState === 'complete') tweenHero();
+
+    // ---- Everything else: continuous scroll-scrubbed reveal ----
+    const scrubSections = document.querySelectorAll('.reveal');
+    const scrubGroups = document.querySelectorAll('.reveal-stagger:not(#heroBlock)');
+
+    function progressFor(el, offsetPx){
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const start = vh * 0.94 + offsetPx;
+      const end = vh * 0.48 + offsetPx;
+      let p = (start - rect.top) / (start - end);
+      return Math.min(Math.max(p, 0), 1);
+    }
+
+    let ticking = false;
+    function update(){
+      ticking = false;
+
+      const heroEl = document.getElementById('heroBlock');
+      const hp = Math.min(Math.max(window.scrollY / 380, 0), 1);
+      heroEl.style.setProperty('--hp', hp);
+
+      scrubSections.forEach(el => el.style.setProperty('--p', progressFor(el, 0)));
+      scrubGroups.forEach(group => {
+        Array.from(group.children).forEach((child, i) => {
+          child.style.setProperty('--p', progressFor(child, i * 55));
+        });
+      });
+
+      drawScene(scrollFraction());
+    }
+    function onScrollOrResize(){
+      if (!ticking){ requestAnimationFrame(update); ticking = true; }
+    }
+    window.addEventListener('scroll', onScrollOrResize, { passive: true });
+    window.addEventListener('resize', onScrollOrResize);
+    update();
+  }
+</script>
+
+</body>
+</html>
