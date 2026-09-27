@@ -124,9 +124,9 @@ body {
 
 .container {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1760px;
   margin: 0 auto;
-  padding: 0 28px;
+  padding: 0 clamp(24px, 3.5vw, 64px);
 }
 
 /* Header & Layered Navigation */
@@ -287,19 +287,19 @@ body {
 }
 
 .page-title {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.12;
   letter-spacing: -0.02em;
   margin-bottom: 16px;
   color: var(--text-main);
 }
 
 .page-subtitle {
-  font-size: 1.05rem;
+  font-size: 1.08rem;
   color: var(--text-muted);
-  max-width: 720px;
-  line-height: 1.6;
+  max-width: 1150px;
+  line-height: 1.65;
   margin-bottom: 36px;
 }
 
@@ -402,10 +402,112 @@ body {
 }
 
 /* Layered Portal Directory Grid on Homepage */
+/* Hero Spread Layout & Telemetry */
+.hero-layout {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 48px;
+  align-items: center;
+  padding: 24px 0 44px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.hero-main {
+  min-width: 0;
+}
+
+.hero-telemetry-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.telemetry-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+.telemetry-pulse {
+  color: var(--text-main);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.telemetry-stat-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 16px 14px;
+}
+
+.telemetry-num {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 4px;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.telemetry-lbl {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.telemetry-footer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.telemetry-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.telemetry-key {
+  color: var(--text-dim);
+}
+
+.telemetry-val {
+  color: var(--text-main);
+  font-weight: 500;
+}
+
 .portal-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 24px;
   margin: 40px 0 60px;
 }
 
@@ -413,7 +515,7 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 28px 24px;
+  padding: 32px 28px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -809,10 +911,14 @@ footer {
 }
 
 /* Responsive */
-@media (max-width: 960px) {
+@media (max-width: 1180px) {
+  .hero-layout { grid-template-columns: 1fr; gap: 32px; }
   .portal-grid { grid-template-columns: repeat(2, 1fr); }
-  .skills-grid { grid-template-columns: repeat(2, 1fr); }
   .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 960px) {
+  .skills-grid { grid-template-columns: repeat(2, 1fr); }
   .bento-grid { grid-template-columns: 1fr; }
   .bento-full { grid-column: span 1; }
   .pillars-grid { grid-template-columns: 1fr; }
@@ -825,6 +931,8 @@ footer {
   .metrics-grid { grid-template-columns: 1fr; }
   .nav-links { display: none; }
   .edu-item { flex-direction: column; }
+  .hero-telemetry-panel { padding: 20px 16px; }
+  .telemetry-grid { grid-template-columns: 1fr; }
 }
 
   </style>
@@ -866,37 +974,75 @@ footer {
 <div class="container" style="padding-top: 50px;">
   
   <!-- Hero Section -->
-  <div style="padding: 20px 0 40px; border-bottom: 1px solid var(--border-color);">
-    <div class="three-word-headline">SYSTEM · ARCHITECTURE · QUANT</div>
-    <h1 class="page-title">Parthasarathi Adhikary</h1>
-    <p style="font-size: 1.15rem; font-weight: 500; color: var(--text-muted); margin-bottom: 20px;">
-      Quantitative ML &amp; Systems Engineering
-    </p>
-    
-    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-      <span class="pill">B.Tech CSE, SRMIST Chennai</span>
-      <span class="pill">Founding Team, Xenodochy</span>
-      <span class="pill">CGPA 9.02</span>
-      <span class="pill">Kolkata / Chennai</span>
+  <div class="hero-layout">
+    <div class="hero-main">
+      <div class="three-word-headline">SYSTEM · ARCHITECTURE · QUANT</div>
+      <h1 class="page-title">Parthasarathi Adhikary</h1>
+      <p style="font-size: 1.18rem; font-weight: 500; color: var(--text-muted); margin-bottom: 20px;">
+        Quantitative ML &amp; Systems Engineering
+      </p>
+      
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill">B.Tech CSE, SRMIST Chennai</span>
+        <span class="pill">Founding Team, Xenodochy</span>
+        <span class="pill">CGPA 9.02</span>
+        <span class="pill">Kolkata / Chennai</span>
+      </div>
+
+      <p class="page-subtitle" style="margin-bottom: 28px;">
+        I build ML pipelines and quantitative models for finance — currently running Monte Carlo-backtested behavioral trading systems and leak-audited classification pipelines. Founding-team engineer at Xenodochy.
+      </p>
+
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="holdings.html" class="btn btn-primary">
+          <span>Explore Holdings →</span>
+        </a>
+        <a href="academics.html" class="btn btn-outline">
+          <span>View Academic Record →</span>
+        </a>
+        <a href="https://github.com/parthowww" target="_blank" rel="noopener" class="btn btn-github">
+          <span>GitHub Profile ↗</span>
+        </a>
+        <a href="contact.html" class="btn btn-outline">
+          <span>Contact &amp; Inquiries</span>
+        </a>
+      </div>
     </div>
 
-    <p class="page-subtitle" style="margin-bottom: 28px;">
-      I build ML pipelines and quantitative models for finance — currently running Monte Carlo-backtested behavioral trading systems and leak-audited classification pipelines. Founding-team engineer at Xenodochy.
-    </p>
-
-    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-      <a href="holdings.html" class="btn btn-primary">
-        <span>Explore Holdings →</span>
-      </a>
-      <a href="academics.html" class="btn btn-outline">
-        <span>View Academic Record →</span>
-      </a>
-      <a href="https://github.com/parthowww" target="_blank" rel="noopener" class="btn btn-github">
-        <span>GitHub Profile ↗</span>
-      </a>
-      <a href="contact.html" class="btn btn-outline">
-        <span>Contact &amp; Inquiries</span>
-      </a>
+    <!-- Telemetry Overview Panel -->
+    <div class="hero-telemetry-panel">
+      <div class="telemetry-top">
+        <span style="font-weight: 600;">TELEMETRY // HIGHLIGHTS</span>
+        <span class="telemetry-pulse">● ACTIVE</span>
+      </div>
+      <div class="telemetry-grid">
+        <div class="telemetry-stat-box">
+          <div class="telemetry-num">9.02</div>
+          <div class="telemetry-lbl">Cumulative CGPA</div>
+        </div>
+        <div class="telemetry-stat-box">
+          <div class="telemetry-num">100K+</div>
+          <div class="telemetry-lbl">Monte Carlo Paths</div>
+        </div>
+        <div class="telemetry-stat-box">
+          <div class="telemetry-num">3</div>
+          <div class="telemetry-lbl">Active Ventures</div>
+        </div>
+        <div class="telemetry-stat-box">
+          <div class="telemetry-num">Zero-Leak</div>
+          <div class="telemetry-lbl">GroupKFold Validation</div>
+        </div>
+      </div>
+      <div class="telemetry-footer-info">
+        <div class="telemetry-row">
+          <span class="telemetry-key">HUBS:</span>
+          <span class="telemetry-val">Chennai (SRMIST) · Kolkata</span>
+        </div>
+        <div class="telemetry-row">
+          <span class="telemetry-key">RESEARCH:</span>
+          <span class="telemetry-val">Quantitative ML, Bandits &amp; Stochastic Risk</span>
+        </div>
+      </div>
     </div>
   </div>
 
