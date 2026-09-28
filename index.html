@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quantitative ML & Systems — Parthasarathi Adhikary</title>
+  <title>partha — ml, quant, building stuff</title>
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -401,14 +401,12 @@ body {
   flex-wrap: wrap;
 }
 
-/* Layered Portal Directory Grid on Homepage */
-/* Hero Spread Layout & Telemetry */
+/* Hero Spread Layout */
 .hero-layout {
-  display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  gap: 48px;
-  align-items: center;
-  padding: 24px 0 44px;
+  display: flex;
+  flex-direction: column;
+  max-width: 780px;
+  padding: 56px 0 52px;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -416,92 +414,60 @@ body {
   min-width: 0;
 }
 
-.hero-telemetry-panel {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 28px 24px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+/* Hero personality styles */
+.hero-wave {
+  display: inline-block;
+  font-size: 1.6em;
+  animation: wave-hand 2.5s ease-in-out infinite;
+  transform-origin: 70% 70%;
+}
+
+@keyframes wave-hand {
+  0%, 60%, 100% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+}
+
+.hero-casual-line {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  max-width: 680px;
+  margin-bottom: 28px;
+}
+
+.hero-quick-facts {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+  padding: 20px 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.hero-fact {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  gap: 4px;
 }
 
-.telemetry-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.08em;
-  color: var(--text-dim);
-}
-
-.telemetry-pulse {
-  color: var(--text-main);
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.telemetry-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-.telemetry-stat-box {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: 16px 14px;
-}
-
-.telemetry-num {
-  font-family: var(--font-mono);
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 4px;
-  color: var(--text-main);
-  letter-spacing: -0.02em;
-}
-
-.telemetry-lbl {
+.hero-fact-label {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.telemetry-footer-info {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  border-top: 1px solid var(--border-color);
-  padding-top: 14px;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-}
-
-.telemetry-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.telemetry-key {
   color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
-.telemetry-val {
+.hero-fact-value {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
   color: var(--text-main);
-  font-weight: 500;
 }
 
 .portal-grid {
@@ -912,7 +878,6 @@ footer {
 
 /* Responsive */
 @media (max-width: 1180px) {
-  .hero-layout { grid-template-columns: 1fr; gap: 32px; }
   .portal-grid { grid-template-columns: repeat(2, 1fr); }
   .metrics-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -931,8 +896,7 @@ footer {
   .metrics-grid { grid-template-columns: 1fr; }
   .nav-links { display: none; }
   .edu-item { flex-direction: column; }
-  .hero-telemetry-panel { padding: 20px 16px; }
-  .telemetry-grid { grid-template-columns: 1fr; }
+  .hero-quick-facts { gap: 16px; }
 }
 
   </style>
@@ -976,204 +940,142 @@ footer {
   <!-- Hero Section -->
   <div class="hero-layout">
     <div class="hero-main">
-      <div class="three-word-headline">SYSTEM · ARCHITECTURE · QUANT</div>
-      <h1 class="page-title">Parthasarathi Adhikary</h1>
-      <p style="font-size: 1.18rem; font-weight: 500; color: var(--text-muted); margin-bottom: 20px;">
-        Quantitative ML &amp; Systems Engineering
+      <h1 class="page-title">hey, i'm partha <span class="hero-wave">👋</span></h1>
+      <p class="hero-casual-line">
+        I'm a CS undergrad at SRM who's really into building things with ML and quant finance.
+        Currently hacking on behavioral trading systems, Monte Carlo backtests, and a couple of
+        startups that probably keep me up too late. Based in Kolkata, studying in Chennai.
       </p>
-      
-      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-        <span class="pill">B.Tech CSE, SRMIST Chennai</span>
-        <span class="pill">Founding Team, Xenodochy</span>
-        <span class="pill">CGPA 9.02</span>
-        <span class="pill">Kolkata / Chennai</span>
-      </div>
 
-      <p class="page-subtitle" style="margin-bottom: 28px;">
-        I build ML pipelines and quantitative models for finance — currently running Monte Carlo-backtested behavioral trading systems and leak-audited classification pipelines. Founding-team engineer at Xenodochy.
-      </p>
+      <div class="hero-quick-facts">
+        <div class="hero-fact">
+          <span class="hero-fact-label">studying</span>
+          <span class="hero-fact-value">B.Tech CSE @ SRMIST</span>
+        </div>
+        <div class="hero-fact">
+          <span class="hero-fact-label">cgpa</span>
+          <span class="hero-fact-value">9.02</span>
+        </div>
+        <div class="hero-fact">
+          <span class="hero-fact-label">building</span>
+          <span class="hero-fact-value">Xenodochy · NudgeVest</span>
+        </div>
+        <div class="hero-fact">
+          <span class="hero-fact-label">vibes</span>
+          <span class="hero-fact-value">quant ml · stochastic risk</span>
+        </div>
+      </div>
 
       <div style="display: flex; gap: 12px; flex-wrap: wrap;">
         <a href="holdings.html" class="btn btn-primary">
-          <span>Explore Holdings →</span>
+          <span>see what i'm building →</span>
         </a>
         <a href="academics.html" class="btn btn-outline">
-          <span>View Academic Record →</span>
+          <span>academic record →</span>
         </a>
         <a href="https://github.com/parthowww" target="_blank" rel="noopener" class="btn btn-github">
-          <span>GitHub Profile ↗</span>
+          <span>github ↗</span>
         </a>
-        <a href="contact.html" class="btn btn-outline">
-          <span>Contact &amp; Inquiries</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Telemetry Overview Panel -->
-    <div class="hero-telemetry-panel">
-      <div class="telemetry-top">
-        <span style="font-weight: 600;">TELEMETRY // HIGHLIGHTS</span>
-        <span class="telemetry-pulse">● ACTIVE</span>
-      </div>
-      <div class="telemetry-grid">
-        <div class="telemetry-stat-box">
-          <div class="telemetry-num">9.02</div>
-          <div class="telemetry-lbl">Cumulative CGPA</div>
-        </div>
-        <div class="telemetry-stat-box">
-          <div class="telemetry-num">100K+</div>
-          <div class="telemetry-lbl">Monte Carlo Paths</div>
-        </div>
-        <div class="telemetry-stat-box">
-          <div class="telemetry-num">3</div>
-          <div class="telemetry-lbl">Active Ventures</div>
-        </div>
-        <div class="telemetry-stat-box">
-          <div class="telemetry-num">Zero-Leak</div>
-          <div class="telemetry-lbl">GroupKFold Validation</div>
-        </div>
-      </div>
-      <div class="telemetry-footer-info">
-        <div class="telemetry-row">
-          <span class="telemetry-key">HUBS:</span>
-          <span class="telemetry-val">Chennai (SRMIST) · Kolkata</span>
-        </div>
-        <div class="telemetry-row">
-          <span class="telemetry-key">RESEARCH:</span>
-          <span class="telemetry-val">Quantitative ML, Bandits &amp; Stochastic Risk</span>
-        </div>
       </div>
     </div>
   </div>
 
-  <!-- Layered Architecture Directory Portals -->
+
+
+
   <div style="padding-top: 40px;">
-    <div class="three-word-headline">LAYERED · DIRECTORY · EXPLORER</div>
-    <h2 style="font-size: 1.6rem; font-weight: 600; margin-bottom: 8px;">Explore Sections</h2>
+    <h2 style="font-size: 1.6rem; font-weight: 600; margin-bottom: 8px;">poke around ↓</h2>
     <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 24px;">
-      Access dedicated sub-pages detailing academic performance, portfolio holdings, architectural pillars, and technical capabilities.
+      everything's split into pages so it's not one giant wall of text. click into whatever interests you.
     </p>
 
     <div class="portal-grid">
       
-      <!-- Academics Subpage Portal -->
       <a href="academics.html" class="portal-card">
         <div>
           <div class="portal-top">
-            <span class="portal-num">01 // RECORD</span>
-            <span class="pill" style="font-size: 0.72rem;">CGPA 9.07</span>
+            <span class="portal-num">01</span>
+            <span class="pill" style="font-size: 0.72rem;">9.02 CGPA</span>
           </div>
-          <h3 class="portal-title">Academics &amp; Coursework</h3>
+          <h3 class="portal-title">academics</h3>
           <p class="portal-desc">
-            Semester-by-semester GPA breakdown at SRMIST Chennai, DPS Ruby Park Kolkata schooling, mathematical coursework, and analytical rigor.
+            semester grades, coursework, school background — the boring-but-real stuff.
           </p>
         </div>
         <div class="portal-link">
-          <span>Open Academics Subpage</span>
-          <span>→</span>
+          <span>grades →</span>
         </div>
       </a>
 
-      <!-- Holdings Subpage Portal -->
       <a href="holdings.html" class="portal-card">
         <div>
           <div class="portal-top">
-            <span class="portal-num">02 // PORTFOLIO</span>
-            <span class="pill" style="font-size: 0.72rem;">3 CORE VENTURES</span>
+            <span class="portal-num">02</span>
+            <span class="pill" style="font-size: 0.72rem;">3 projects</span>
           </div>
-          <h3 class="portal-title">Holdings &amp; Projects</h3>
+          <h3 class="portal-title">things i've built</h3>
           <p class="portal-desc">
-            Deep dive into Xenodochy (holding company structure), NudgeVest (Thompson Sampling behavioral fintech), and StockPulse (time-series regression).
+            Xenodochy, NudgeVest, StockPulse — ML systems, fintech experiments, and the startup stuff.
           </p>
         </div>
         <div class="portal-link">
-          <span>Open Holdings Subpage</span>
-          <span>→</span>
+          <span>projects →</span>
         </div>
       </a>
 
-      <!-- Pillars Subpage Portal -->
       <a href="pillars.html" class="portal-card">
         <div>
           <div class="portal-top">
-            <span class="portal-num">03 // ARCHITECTURE</span>
-            <span class="pill" style="font-size: 0.72rem;">4 PILLARS</span>
+            <span class="portal-num">03</span>
+            <span class="pill" style="font-size: 0.72rem;">4 pillars</span>
           </div>
-          <h3 class="portal-title">Execution Pillars</h3>
+          <h3 class="portal-title">how i think</h3>
           <p class="portal-desc">
-            Standardized principles: Quant Intelligence, Zero-Leakage cross-validation, 100K+ Monte Carlo stochastic testing, and rapid prototyping.
+            the principles behind how I build — zero data leakage, Monte Carlo validation, that sort of thing.
           </p>
         </div>
         <div class="portal-link">
-          <span>Open Pillars Subpage</span>
-          <span>→</span>
+          <span>principles →</span>
         </div>
       </a>
 
-      <!-- Skills Subpage Portal -->
       <a href="skills.html" class="portal-card">
         <div>
           <div class="portal-top">
-            <span class="portal-num">04 // ARSENAL</span>
-            <span class="pill" style="font-size: 0.72rem;">TECH STACK</span>
+            <span class="portal-num">04</span>
+            <span class="pill" style="font-size: 0.72rem;">tech stack</span>
           </div>
-          <h3 class="portal-title">Technical Skills</h3>
+          <h3 class="portal-title">what i use</h3>
           <p class="portal-desc">
-            Languages (Python, C/C++, SQL), ML frameworks (scikit-learn, LightGBM, XGBoost), quantitative modeling, and spoken languages.
+            Python, C/C++, scikit-learn, XGBoost, SQL — the tools and languages I actually work with.
           </p>
         </div>
         <div class="portal-link">
-          <span>Open Skills Subpage</span>
-          <span>→</span>
+          <span>skills →</span>
         </div>
       </a>
 
-      <!-- Contact Subpage Portal -->
       <a href="contact.html" class="portal-card">
         <div>
           <div class="portal-top">
-            <span class="portal-num">05 // CONNECT</span>
-            <span class="pill" style="font-size: 0.72rem;">AVAILABLE</span>
+            <span class="portal-num">05</span>
+            <span class="pill" style="font-size: 0.72rem;">open</span>
           </div>
-          <h3 class="portal-title">Contact &amp; Inquiries</h3>
+          <h3 class="portal-title">say hi</h3>
           <p class="portal-desc">
-            Direct communication channels, verified GitHub repository links, LinkedIn, phone, and location presence in Kolkata &amp; Chennai.
+            email, GitHub, LinkedIn — all the ways to reach me. I'm pretty responsive.
           </p>
         </div>
         <div class="portal-link">
-          <span>Open Contact Subpage</span>
-          <span>→</span>
+          <span>contact →</span>
         </div>
       </a>
-
-      <!-- Executive Overview Card -->
-      <div class="portal-card" style="background: var(--bg-surface-elevated); border-color: var(--border-strong);">
-        <div>
-          <div class="portal-top">
-            <span class="portal-num">SUMMARY</span>
-            <span class="pill" style="font-size: 0.72rem;">AUTONOMOUS</span>
-          </div>
-          <h3 class="portal-title">Quantitative Vision</h3>
-          <p class="portal-desc">
-            Building empirical systems where statistical rigor meets venture incubation. Prioritizing reproducible alpha, group-aware CV, and real utility.
-          </p>
-        </div>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto;">
-          <a href="mailto:parthasarathiadhikary2812@gmail.com" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.76rem;">
-            <span>Email Me</span>
-          </a>
-          <a href="https://github.com/parthowww" target="_blank" rel="noopener" class="btn btn-github" style="padding: 6px 12px; font-size: 0.76rem;">
-            <span>GitHub ↗</span>
-          </a>
-        </div>
-      </div>
 
     </div>
   </div>
 
-  <!-- Key Metrics Teaser -->
   <div style="padding-bottom: 60px;">
-    <div class="three-word-headline">SYNTHESIS · OF · NUMBERS</div>
+    <h3 style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-dim); letter-spacing: 0.06em; margin-bottom: 16px;">quick numbers</h3>
     <div class="metrics-grid">
       <div class="metric-card">
         <div class="metric-val">9.02</div>
@@ -1202,24 +1104,22 @@ footer {
   <footer>
     <div class="container footer-inner">
       <div>
-        <span style="font-weight:600; color:var(--text-main);">PARTHASARATHI ADHIKARY</span>
+        <span style="font-weight:600; color:var(--text-main);">partha</span>
         <span style="margin: 0 8px;">·</span>
-        <span>QUANTITATIVE ML & SYSTEMS</span>
+        <span>kolkata / chennai</span>
       </div>
 
       <ul class="footer-nav">
-        <li><a href="index.html">Overview</a></li>
-        <li><a href="academics.html">Academics</a></li>
-        <li><a href="holdings.html">Holdings</a></li>
-        <li><a href="pillars.html">Pillars</a></li>
-        <li><a href="skills.html">Skills</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="https://github.com/parthowww" target="_blank" rel="noopener">GitHub ↗</a></li>
+        <li><a href="index.html">home</a></li>
+        <li><a href="academics.html">academics</a></li>
+        <li><a href="holdings.html">projects</a></li>
+        <li><a href="skills.html">skills</a></li>
+        <li><a href="contact.html">contact</a></li>
+        <li><a href="https://github.com/parthowww" target="_blank" rel="noopener">github ↗</a></li>
       </ul>
 
       <div style="display:flex; align-items:center; gap:8px;">
         <span id="live-clock">IST 00:00:00</span>
-        <span>● ONLINE</span>
       </div>
     </div>
   </footer>
