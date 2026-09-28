@@ -124,9 +124,9 @@ body {
 
 .container {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1760px;
   margin: 0 auto;
-  padding: 0 28px;
+  padding: 0 clamp(24px, 3.5vw, 64px);
 }
 
 /* Header & Layered Navigation */
@@ -287,19 +287,19 @@ body {
 }
 
 .page-title {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.12;
   letter-spacing: -0.02em;
   margin-bottom: 16px;
   color: var(--text-main);
 }
 
 .page-subtitle {
-  font-size: 1.05rem;
+  font-size: 1.08rem;
   color: var(--text-muted);
-  max-width: 720px;
-  line-height: 1.6;
+  max-width: 1150px;
+  line-height: 1.65;
   margin-bottom: 36px;
 }
 
@@ -474,7 +474,7 @@ body {
 .bento-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  gap: 28px;
 }
 
 .bento-full {
@@ -485,7 +485,7 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 30px;
+  padding: 36px 34px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -809,12 +809,15 @@ footer {
 }
 
 /* Responsive */
-@media (max-width: 960px) {
+@media (max-width: 1180px) {
   .portal-grid { grid-template-columns: repeat(2, 1fr); }
-  .skills-grid { grid-template-columns: repeat(2, 1fr); }
   .metrics-grid { grid-template-columns: repeat(2, 1fr); }
   .bento-grid { grid-template-columns: 1fr; }
   .bento-full { grid-column: span 1; }
+}
+
+@media (max-width: 960px) {
+  .skills-grid { grid-template-columns: repeat(2, 1fr); }
   .pillars-grid { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
 }
@@ -883,27 +886,26 @@ footer {
     <div class="bento-grid">
       
       <!-- Xenodochy -->
-      <div class="bento-card bento-full">
+      <div class="bento-card">
         <div>
           <div class="card-top">
-            <span class="card-sym">XNDC · LIVE</span>
+            <span class="card-sym">XNDC · CORE</span>
             <span class="pill" style="font-size:0.72rem;">FOUNDING TEAM</span>
           </div>
           <h3 class="card-title">Xenodochy</h3>
           <p class="card-desc">
-            A holding-company concept built with friends — an umbrella structure engineered to sit above a portfolio of future high-conviction ventures rather than manage a single product.
+            An umbrella venture structure engineered above high-conviction initiatives across software platforms, automated research, and quantitative systems.
           </p>
           <ul class="bullet-list">
-            <li>Founding-team member actively architecting core systems, operational infrastructure, and venture ideation</li>
-            <li>Orchestrating autonomous multi-agent pipelines for venture acceleration and decision validation</li>
-            <li>Designed for rapid horizontal expansion across software, quant finance, and automated research</li>
+            <li>Architecting foundational operational infrastructure and cross-venture ideation</li>
+            <li>Deploying autonomous multi-agent pipelines for continuous testing and validation</li>
+            <li>Powering specialized operational platforms including Xndcy Dine for hospitality management</li>
           </ul>
         </div>
         <div class="tags">
-          <span class="tag">Holding Structure</span>
           <span class="tag">Venture Architecture</span>
           <span class="tag">Multi-Agent Systems</span>
-          <span class="tag">Corporate Governance</span>
+          <span class="tag">Distributed Ops</span>
         </div>
       </div>
 
@@ -912,91 +914,73 @@ footer {
         <div>
           <div class="card-top">
             <span class="card-sym">NDGV · 2026</span>
-            <span class="tag">FINTECH &amp; QUANT</span>
+            <span class="tag">QUANT &amp; FINTECH</span>
           </div>
           <h3 class="card-title">NudgeVest</h3>
           <p class="card-desc">
-            Behavioral micro-investing platform combining loss-aversion and temporal-discounting heuristics with ML-driven contextual recommendation.
+            Behavioral micro-investing system combining loss-aversion heuristics with reinforcement learning and rigorous stochastic backtesting.
           </p>
           <ul class="bullet-list">
-            <li>Contextual bandits with Thompson Sampling for adaptive user prompt timing</li>
-            <li>XGBoost &amp; LightGBM classifiers trained with SMOTE class balancing</li>
-            <li>Monte Carlo CAGR backtesting benchmarked rigorously against Nifty 50 historical index paths</li>
+            <li>Contextual bandits with Thompson Sampling for dynamic nudge dispatch optimization</li>
+            <li>XGBoost &amp; LightGBM classification models trained with SMOTE class balancing</li>
+            <li>100k+ path Monte Carlo simulation benchmarked against Nifty 50 historical index paths</li>
           </ul>
         </div>
         <div class="tags">
           <span class="tag">Python</span>
+          <span class="tag">FastAPI</span>
           <span class="tag">Thompson Sampling</span>
           <span class="tag">Monte Carlo</span>
-          <span class="tag">Behavioral Economics</span>
         </div>
       </div>
 
-      <!-- StockPulse -->
+      <!-- Spending-Leak Agent -->
       <div class="bento-card">
         <div>
           <div class="card-top">
-            <span class="card-sym">STKP · 2026</span>
-            <span class="tag">FINANCE &amp; TIME SERIES</span>
+            <span class="card-sym">SPND · 2026</span>
+            <span class="tag">FINANCIAL AUDIT</span>
           </div>
-          <h3 class="card-title">StockPulse</h3>
+          <h3 class="card-title">Spending-Leak Agent</h3>
           <p class="card-desc">
-            Pattern-based ML regression model engineered to detect multi-timeframe stock market trend momentum and volatility shifts.
+            Explainable personal-finance engine that normalizes multi-format transaction records, detects recurring subscription leaks, and estimates annual savings.
           </p>
           <ul class="bullet-list">
-            <li>Time-series feature extraction across momentum, RSI bands, and order book velocity</li>
-            <li>Prototyped and benchmarked using Google AI Studio, VS Code, and Figma design tokens</li>
+            <li>Automated CSV transaction normalization with rule-based recurring payment classification</li>
+            <li>Identifies zombie subscriptions, unannounced renewal price spikes, and duplicate plans</li>
+            <li>Guided verified cancellation paths and exportable leak-audit financial summaries</li>
           </ul>
         </div>
         <div class="tags">
-          <span class="tag">Regression</span>
-          <span class="tag">Time Series</span>
-          <span class="tag">Google AI Studio</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag">SQLite</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Audit Engine</span>
         </div>
       </div>
 
-    </div>
-
-    <!-- Other Builds: lower-weight section, kept separate from core quant/fintech ventures above -->
-    <div style="display:flex; align-items:center; gap:10px; margin: 36px 0 16px;">
-      <span style="font-family:var(--font-mono); font-size:0.76rem; color:var(--text-dim); letter-spacing:0.06em;">OTHER BUILDS</span>
-      <div style="flex:1; height:1px; background:var(--border-color);"></div>
-    </div>
-    <div class="bento-grid">
-
-      <!-- Titanic Survival Pipeline -->
-      <div class="bento-card" style="padding:20px;">
+      <!-- Campus Companion -->
+      <div class="bento-card">
         <div>
           <div class="card-top">
-            <span class="card-sym">TTNC · 2026</span>
-            <span class="tag">KAGGLE PRACTICE</span>
+            <span class="card-sym">CMPX · 2026</span>
+            <span class="tag">SYSTEMS &amp; UTILITIES</span>
           </div>
-          <h3 class="card-title" style="font-size:1.05rem;">Titanic Survival Pipeline</h3>
-          <p class="card-desc" style="font-size:0.86rem; margin-bottom:12px;">
-            CV-methodology exercise on the classic Kaggle dataset — diagnosing and eliminating target leakage via group-aware (GroupKFold) splits.
+          <h3 class="card-title">Campus Companion</h3>
+          <p class="card-desc">
+            Modular student command center integrating academic scheduling, attendance margin analytics, grade forecasting, and administrative tracking.
           </p>
+          <ul class="bullet-list">
+            <li>Predictive attendance margin calculator preventing mandatory threshold defaults</li>
+            <li>Relational schema on SQLite for class timetables, assignments, and faculty directories</li>
+            <li>Lightweight, self-hosted operational dashboard built for speed and zero lag</li>
+          </ul>
         </div>
         <div class="tags">
-          <span class="tag">scikit-learn</span>
-          <span class="tag">GroupKFold</span>
-        </div>
-      </div>
-
-      <!-- Healthcare AI -->
-      <div class="bento-card" style="padding:20px;">
-        <div>
-          <div class="card-top">
-            <span class="card-sym">HLTH · 2026</span>
-            <span class="tag">PROTOTYPE</span>
-          </div>
-          <h3 class="card-title" style="font-size:1.05rem;">ElderlyAI &amp; MedicareAI</h3>
-          <p class="card-desc" style="font-size:0.86rem; margin-bottom:12px;">
-            Assistive-AI prototypes for senior fall detection and hospital billing automation, built on Replit and Antigravity.
-          </p>
-        </div>
-        <div class="tags">
-          <span class="tag">Replit</span>
-          <span class="tag">Antigravity</span>
+          <span class="tag">Python</span>
+          <span class="tag">Streamlit</span>
+          <span class="tag">SQLite</span>
+          <span class="tag">Data Analytics</span>
         </div>
       </div>
 
