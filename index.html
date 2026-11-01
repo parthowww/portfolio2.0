@@ -926,18 +926,26 @@ footer {
 to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Scroll Reveal */
+/* Smooth Successive Scroll Reveal */
 .reveal {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
+  transform: translateY(32px);
+  will-change: opacity, transform;
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal.revealed {
   opacity: 1;
   transform: translateY(0);
 }
-
-  </style>
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -981,7 +989,7 @@ to   { opacity: 1; transform: translateY(0); }
         startups that probably keep me up too late. Based in Kolkata, studying in Chennai.
       </p>
 
-      <div class="hero-quick-facts">
+      <div class="hero-quick-facts reveal">
         <div class="hero-fact">
           <span class="hero-fact-label">Studying</span>
           <span class="hero-fact-value">B.Tech CSE @ SRMIST</span>
@@ -1172,18 +1180,26 @@ function onScroll() {
 }
 window.addEventListener('scroll', onScroll, { passive: true });
 
-/* Scroll Reveal */
+/* Smooth Successive Scroll Reveal */
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      const siblings = Array.from(entry.target.parentElement.children).filter(el => el.classList.contains('reveal'));
+      const parent = entry.target.parentElement;
+      const siblings = Array.from(parent.children).filter(el => el.classList.contains('reveal'));
       const idx = siblings.indexOf(entry.target);
-      entry.target.style.transitionDelay = (idx * 0.07) + 's';
-      entry.target.classList.add('revealed');
+      const delay = idx >= 0 ? (idx * 90) : 0;
+      
+      setTimeout(() => {
+        entry.target.classList.add('revealed');
+      }, delay);
+      
       revealObserver.unobserve(entry.target);
     }
   });
-}, { threshold: 0.08 });
+}, {
+  threshold: 0.12,
+  rootMargin: '0px 0px -40px 0px'
+});
 
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 

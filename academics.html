@@ -926,18 +926,26 @@ footer {
 to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Scroll Reveal */
+/* Smooth Successive Scroll Reveal */
 .reveal {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
+  transform: translateY(32px);
+  will-change: opacity, transform;
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal.revealed {
   opacity: 1;
   transform: translateY(0);
 }
-
-  </style>
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -1071,7 +1079,7 @@ to   { opacity: 1; transform: translateY(0); }
     </div>
 
     <!-- Academic Methodology Deep Dive -->
-    <div style="margin-top: 40px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;">
+    <div class="reveal" style="margin-top: 40px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;">
       <div class="three-word-headline">SCIENTIFIC · RIGOR</div>
       <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 12px;">Analytical Focus &amp; Pipeline Verification</h3>
       <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 16px;">
@@ -1138,18 +1146,26 @@ function onScroll() {
 }
 window.addEventListener('scroll', onScroll, { passive: true });
 
-/* Scroll Reveal */
+/* Smooth Successive Scroll Reveal */
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      const siblings = Array.from(entry.target.parentElement.children).filter(el => el.classList.contains('reveal'));
+      const parent = entry.target.parentElement;
+      const siblings = Array.from(parent.children).filter(el => el.classList.contains('reveal'));
       const idx = siblings.indexOf(entry.target);
-      entry.target.style.transitionDelay = (idx * 0.07) + 's';
-      entry.target.classList.add('revealed');
+      const delay = idx >= 0 ? (idx * 90) : 0;
+      
+      setTimeout(() => {
+        entry.target.classList.add('revealed');
+      }, delay);
+      
       revealObserver.unobserve(entry.target);
     }
   });
-}, { threshold: 0.08 });
+}, {
+  threshold: 0.12,
+  rootMargin: '0px 0px -40px 0px'
+});
 
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
