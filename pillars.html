@@ -11,9 +11,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
-  <!-- Three.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
   <style>
 
 /* ==========================================================================
@@ -109,17 +106,6 @@ body {
   display: flex;
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
-}
-
-#webgl-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.7;
 }
 
 .container {
@@ -276,16 +262,6 @@ body {
 }
 
 /* Typography & Badges */
-.three-word-headline {
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-
 .page-title {
   font-size: clamp(2.2rem, 4.5vw, 3.8rem);
   font-weight: 700;
@@ -893,10 +869,6 @@ body {
 </head>
 <body>
 
-  <!-- Minimal Monochrome 3D Canvas Background -->
-  <canvas id="webgl-bg"></canvas>
-
-  
   <header class="navbar">
     <div class="container nav-container">
       <a href="index.html" class="nav-brand">
@@ -1066,85 +1038,7 @@ body {
 
   <script>
 
-/* Minimal 3D Wireframe Canvas Background (Zero Purple, Monochromatic) */
-const canvas = document.getElementById('webgl-bg');
-if (canvas && typeof THREE !== 'undefined') {
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.z = 25;
 
-  const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
-  scene.add(ambientLight);
-
-  const shapesGroup = new THREE.Group();
-  scene.add(shapesGroup);
-
-  const wireMat = new THREE.MeshStandardMaterial({
-    color: 0x71717a,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.35
-  });
-
-  const wireMat2 = new THREE.MeshStandardMaterial({
-    color: 0xa1a1aa,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.25
-  });
-
-  const icosaGeo = new THREE.IcosahedronGeometry(4.5, 0);
-  const icosa = new THREE.Mesh(icosaGeo, wireMat);
-  icosa.position.set(13, 3, -6);
-  shapesGroup.add(icosa);
-
-  const octaGeo = new THREE.OctahedronGeometry(3.6, 0);
-  const octa = new THREE.Mesh(octaGeo, wireMat2);
-  octa.position.set(-13, -4, -6);
-  shapesGroup.add(octa);
-
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-
-  let currentScroll = 0;
-  let targetScroll = 0;
-
-  const progressBar = document.getElementById('scroll-progress');
-
-  function onScroll() {
-    const scrollY = window.scrollY;
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = maxScroll > 0 ? (scrollY / maxScroll) * 100 : 0;
-    if (progressBar) progressBar.style.width = progress + '%';
-    targetScroll = scrollY;
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-
-  function animate() {
-    requestAnimationFrame(animate);
-    currentScroll += (targetScroll - currentScroll) * 0.08;
-    const scrollFrac = currentScroll * 0.001;
-
-    icosa.rotation.x = scrollFrac * 1.5;
-    icosa.rotation.y = scrollFrac * 1.8;
-    icosa.position.y = 3 - (scrollFrac * 3.5);
-
-    octa.rotation.y = scrollFrac * 1.6;
-    octa.rotation.z = scrollFrac * 1.2;
-    octa.position.y = -4 + (scrollFrac * 3.5);
-
-    shapesGroup.rotation.y = scrollFrac * 0.15;
-    renderer.render(scene, camera);
-  }
-  animate();
-}
 
 /* Scroll Progress */
 const progressBar = document.getElementById('scroll-progress');
