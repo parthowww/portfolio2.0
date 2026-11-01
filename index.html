@@ -899,6 +899,65 @@ footer {
   .hero-quick-facts { gap: 16px; }
 }
 
+/* Page Transition Overlay */
+#page-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-main);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+#page-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+body {
+  animation: pageIn 0.35s ease forwards;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Scroll Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Nav active underline (replace old active-nav-bg approach) */
+.nav-links a {
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 13px;
+  right: 13px;
+  height: 1px;
+  background: var(--text-main);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+.nav-links a.active::after {
+  transform: scaleX(1);
+}
+.nav-links a.active {
+  color: var(--text-main);
+  background: transparent !important;
+  border-color: transparent !important;
+  font-weight: 600;
+}
+
   </style>
 </head>
 <body>
@@ -991,7 +1050,7 @@ footer {
 
     <div class="portal-grid">
       
-      <a href="academics.html" class="portal-card">
+      <a href="academics.html" class="portal-card reveal">
         <div>
           <div class="portal-top">
             <span class="portal-num">01</span>
@@ -1007,11 +1066,11 @@ footer {
         </div>
       </a>
 
-      <a href="holdings.html" class="portal-card">
+      <a href="holdings.html" class="portal-card reveal">
         <div>
           <div class="portal-top">
             <span class="portal-num">02</span>
-            <span class="pill" style="font-size: 0.72rem;">8 projects</span>
+            <span class="pill" style="font-size: 0.72rem;">projects</span>
           </div>
           <h3 class="portal-title">things i've built</h3>
           <p class="portal-desc">
@@ -1022,7 +1081,7 @@ footer {
         </div>
       </a>
 
-      <a href="pillars.html" class="portal-card">
+      <a href="pillars.html" class="portal-card reveal">
         <div>
           <div class="portal-top">
             <span class="portal-num">03</span>
@@ -1038,7 +1097,7 @@ footer {
         </div>
       </a>
 
-      <a href="skills.html" class="portal-card">
+      <a href="skills.html" class="portal-card reveal">
         <div>
           <div class="portal-top">
             <span class="portal-num">04</span>
@@ -1054,7 +1113,7 @@ footer {
         </div>
       </a>
 
-      <a href="contact.html" class="portal-card">
+      <a href="contact.html" class="portal-card reveal">
         <div>
           <div class="portal-top">
             <span class="portal-num">05</span>
@@ -1076,19 +1135,19 @@ footer {
   <div style="padding-bottom: 60px;">
     <h3 style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-dim); letter-spacing: 0.06em; margin-bottom: 16px;">quick numbers</h3>
     <div class="metrics-grid">
-      <div class="metric-card">
+      <div class="metric-card reveal">
         <div class="metric-val">9.02</div>
         <div class="metric-lbl">Cumulative CGPA</div>
       </div>
-      <div class="metric-card">
+      <div class="metric-card reveal">
         <div class="metric-val">100K+</div>
-        <div class="metric-lbl">Monte Carlo Paths</div>
+        <div class="metric-lbl">Simulation Paths</div>
       </div>
-      <div class="metric-card">
+      <div class="metric-card reveal">
         <div class="metric-val">8</div>
         <div class="metric-lbl">Shipped Projects & Ventures</div>
       </div>
-      <div class="metric-card">
+      <div class="metric-card reveal">
         <div class="metric-val">2029</div>
         <div class="metric-lbl">Expected Graduation</div>
       </div>
@@ -1205,6 +1264,43 @@ if (canvas && typeof THREE !== 'undefined') {
   }
   animate();
 }
+
+/* Scroll Progress */
+const progressBar = document.getElementById('scroll-progress');
+function onScroll() {
+  const scrollY = window.scrollY;
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = maxScroll > 0 ? (scrollY / maxScroll) * 100 : 0;
+  if (progressBar) progressBar.style.width = progress + '%';
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+
+/* Page Transition */
+const overlay = document.getElementById('page-overlay');
+document.querySelectorAll('a[href]').forEach(link => {
+  const href = link.getAttribute('href');
+  if (!href || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel') || href.startsWith('#')) return;
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    overlay.classList.add('active');
+    setTimeout(() => { window.location.href = href; }, 280);
+  });
+});
+
+/* Scroll Reveal */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      const siblings = Array.from(entry.target.parentElement.children).filter(el => el.classList.contains('reveal'));
+      const idx = siblings.indexOf(entry.target);
+      entry.target.style.transitionDelay = (idx * 0.07) + 's';
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 /* Theme Toggle & LocalStorage Persistence */
 const themeToggleBtn = document.getElementById('theme-toggle');

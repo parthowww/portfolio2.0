@@ -830,6 +830,65 @@ footer {
   .edu-item { flex-direction: column; }
 }
 
+/* Page Transition Overlay */
+#page-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-main);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+#page-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+body {
+  animation: pageIn 0.35s ease forwards;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Scroll Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Nav active underline (replace old active-nav-bg approach) */
+.nav-links a {
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 13px;
+  right: 13px;
+  height: 1px;
+  background: var(--text-main);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+.nav-links a.active::after {
+  transform: scaleX(1);
+}
+.nav-links a.active {
+  color: var(--text-main);
+  background: transparent !important;
+  border-color: transparent !important;
+  font-weight: 600;
+}
+
   </style>
 </head>
 <body>
@@ -886,10 +945,10 @@ footer {
     <div class="bento-grid">
       
       <!-- LeakLens -->
-      <div class="bento-card" style="border-left: 2px solid #10b981;">
+      <div class="bento-card reveal" style="border-left: 2px solid #10b981;">
         <div>
           <div class="card-top">
-            <span class="card-sym">LEAK · 2026</span>
+            <span class="card-sym" style="font-family:var(--font-mono);font-size:0.74rem;color:var(--text-dim);">2026</span>
             <span class="pill" style="font-size:0.72rem; background: rgba(16, 185, 129, 0.15); color: #10b981;">LIVE SAAS</span>
           </div>
           <h3 class="card-title">LeakLens</h3>
@@ -909,13 +968,16 @@ footer {
           <span class="tag">Tailwind CSS</span>
           <span class="tag">Recharts</span>
         </div>
+        <div style="margin-top:14px;">
+          <a href="https://github.com/parthowww/leaklens" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:0.76rem;color:var(--text-dim);text-decoration:none;" class="card-github-link">↗ github</a>
+        </div>
       </div>
 
       <!-- Aerarium -->
-      <div class="bento-card">
+      <div class="bento-card reveal">
         <div>
           <div class="card-top">
-            <span class="card-sym">AERM · 2026</span>
+            <span class="card-sym" style="font-family:var(--font-mono);font-size:0.74rem;color:var(--text-dim);">2026</span>
             <span class="tag">CASHFLOW &amp; RUNWAY</span>
           </div>
           <h3 class="card-title">Aerarium</h3>
@@ -934,13 +996,16 @@ footer {
           <span class="tag">Runway Modeling</span>
           <span class="tag">Treasury</span>
         </div>
+        <div style="margin-top:14px;">
+          <a href="https://github.com/parthowww/aerarium" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:0.76rem;color:var(--text-dim);text-decoration:none;" class="card-github-link">↗ github</a>
+        </div>
       </div>
 
       <!-- Zentropy -->
-      <div class="bento-card">
+      <div class="bento-card reveal">
         <div>
           <div class="card-top">
-            <span class="card-sym">ZNTP · 2026</span>
+            <span class="card-sym" style="font-family:var(--font-mono);font-size:0.74rem;color:var(--text-dim);">2026</span>
             <span class="tag">TELEMETRY &amp; SYSTEMS</span>
           </div>
           <h3 class="card-title">Zentropy</h3>
@@ -959,13 +1024,16 @@ footer {
           <span class="tag">Node.js</span>
           <span class="tag">Docker</span>
         </div>
+        <div style="margin-top:14px;">
+          <a href="https://github.com/parthowww/zentropy" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:0.76rem;color:var(--text-dim);text-decoration:none;" class="card-github-link">↗ github</a>
+        </div>
       </div>
 
       <!-- Safara (SIH 2026) -->
-      <div class="bento-card">
+      <div class="bento-card reveal">
         <div>
           <div class="card-top">
-            <span class="card-sym">SIH · 2026</span>
+            <span class="card-sym" style="font-family:var(--font-mono);font-size:0.74rem;color:var(--text-dim);">2026</span>
             <span class="tag">SIH HACKATHON</span>
           </div>
           <h3 class="card-title">Safara — Tourist Safety System</h3>
@@ -984,13 +1052,16 @@ footer {
           <span class="tag">Geo-Fencing</span>
           <span class="tag">PWA</span>
         </div>
+        <div style="margin-top:14px;">
+          <a href="https://github.com/parthowww/dahsboard.safara" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:0.76rem;color:var(--text-dim);text-decoration:none;" class="card-github-link">↗ github</a>
+        </div>
       </div>
 
       <!-- Xenodochy -->
-      <div class="bento-card">
+      <div class="bento-card reveal">
         <div>
           <div class="card-top">
-            <span class="card-sym">XNDC · CORE</span>
+            
             <span class="pill" style="font-size:0.72rem;">FOUNDING TEAM</span>
           </div>
           <h3 class="card-title">Xenodochy</h3>
@@ -1011,10 +1082,10 @@ footer {
       </div>
 
       <!-- NudgeVest -->
-      <div class="bento-card">
+      <div class="bento-card reveal">
         <div>
           <div class="card-top">
-            <span class="card-sym">NDGV · 2026</span>
+            <span class="card-sym" style="font-family:var(--font-mono);font-size:0.74rem;color:var(--text-dim);">2026</span>
             <span class="tag">QUANT &amp; FINTECH</span>
           </div>
           <h3 class="card-title">NudgeVest</h3>
@@ -1036,10 +1107,10 @@ footer {
       </div>
 
       <!-- Spending-Leak Agent -->
-      <div class="bento-card">
+      <div class="bento-card reveal">
         <div>
           <div class="card-top">
-            <span class="card-sym">SPND · 2026</span>
+            <span class="card-sym" style="font-family:var(--font-mono);font-size:0.74rem;color:var(--text-dim);">2026</span>
             <span class="tag">FINANCIAL AUDIT</span>
           </div>
           <h3 class="card-title">Spending-Leak Agent</h3>
@@ -1061,10 +1132,10 @@ footer {
       </div>
 
       <!-- Campus Companion -->
-      <div class="bento-card">
+      <div class="bento-card reveal">
         <div>
           <div class="card-top">
-            <span class="card-sym">CMPX · 2026</span>
+            <span class="card-sym" style="font-family:var(--font-mono);font-size:0.74rem;color:var(--text-dim);">2026</span>
             <span class="tag">SYSTEMS &amp; UTILITIES</span>
           </div>
           <h3 class="card-title">Campus Companion</h3>
@@ -1210,6 +1281,43 @@ if (canvas && typeof THREE !== 'undefined') {
   }
   animate();
 }
+
+/* Scroll Progress */
+const progressBar = document.getElementById('scroll-progress');
+function onScroll() {
+  const scrollY = window.scrollY;
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = maxScroll > 0 ? (scrollY / maxScroll) * 100 : 0;
+  if (progressBar) progressBar.style.width = progress + '%';
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+
+/* Page Transition */
+const overlay = document.getElementById('page-overlay');
+document.querySelectorAll('a[href]').forEach(link => {
+  const href = link.getAttribute('href');
+  if (!href || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel') || href.startsWith('#')) return;
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    overlay.classList.add('active');
+    setTimeout(() => { window.location.href = href; }, 280);
+  });
+});
+
+/* Scroll Reveal */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      const siblings = Array.from(entry.target.parentElement.children).filter(el => el.classList.contains('reveal'));
+      const idx = siblings.indexOf(entry.target);
+      entry.target.style.transitionDelay = (idx * 0.07) + 's';
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 /* Theme Toggle & LocalStorage Persistence */
 const themeToggleBtn = document.getElementById('theme-toggle');

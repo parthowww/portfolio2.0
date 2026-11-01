@@ -830,6 +830,65 @@ footer {
   .edu-item { flex-direction: column; }
 }
 
+/* Page Transition Overlay */
+#page-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-main);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+#page-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+body {
+  animation: pageIn 0.35s ease forwards;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Scroll Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Nav active underline (replace old active-nav-bg approach) */
+.nav-links a {
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 13px;
+  right: 13px;
+  height: 1px;
+  background: var(--text-main);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+.nav-links a.active::after {
+  transform: scaleX(1);
+}
+.nav-links a.active {
+  color: var(--text-main);
+  background: transparent !important;
+  border-color: transparent !important;
+  font-weight: 600;
+}
+
   </style>
 </head>
 <body>
@@ -883,11 +942,11 @@ footer {
 
     <!-- Scorecards -->
     <div class="metrics-grid">
-      <div class="metric-card">
+      <div class="metric-card reveal">
         <div class="metric-val">9.23</div>
         <div class="metric-lbl">Semester 1 GPA</div>
       </div>
-      <div class="metric-card">
+      <div class="metric-card reveal">
         <div class="metric-val">8.81</div>
         <div class="metric-lbl">Semester 2 GPA</div>
       </div>
@@ -895,7 +954,7 @@ footer {
         <div class="metric-val">9.02</div>
         <div class="metric-lbl">Cumulative CGPA</div>
       </div>
-      <div class="metric-card">
+      <div class="metric-card reveal">
         <div class="metric-val">2029</div>
         <div class="metric-lbl">Expected Graduation</div>
       </div>
@@ -909,7 +968,7 @@ footer {
     <div class="edu-list">
       
       <!-- SRMIST -->
-      <div class="edu-item">
+      <div class="edu-item reveal">
         <div style="flex: 1;">
           <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
             <span class="pill" style="font-size: 0.72rem;">UNDERGRADUATE</span>
@@ -932,7 +991,7 @@ footer {
       </div>
 
       <!-- DPS Ruby Park Class XII -->
-      <div class="edu-item">
+      <div class="edu-item reveal">
         <div style="flex: 1;">
           <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
             <span class="pill" style="font-size: 0.72rem;">SENIOR SECONDARY</span>
@@ -949,7 +1008,7 @@ footer {
       </div>
 
       <!-- DPS Ruby Park Class X -->
-      <div class="edu-item">
+      <div class="edu-item reveal">
         <div style="flex: 1;">
           <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
             <span class="pill" style="font-size: 0.72rem;">SECONDARY</span>
@@ -1102,6 +1161,43 @@ if (canvas && typeof THREE !== 'undefined') {
   }
   animate();
 }
+
+/* Scroll Progress */
+const progressBar = document.getElementById('scroll-progress');
+function onScroll() {
+  const scrollY = window.scrollY;
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = maxScroll > 0 ? (scrollY / maxScroll) * 100 : 0;
+  if (progressBar) progressBar.style.width = progress + '%';
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+
+/* Page Transition */
+const overlay = document.getElementById('page-overlay');
+document.querySelectorAll('a[href]').forEach(link => {
+  const href = link.getAttribute('href');
+  if (!href || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel') || href.startsWith('#')) return;
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    overlay.classList.add('active');
+    setTimeout(() => { window.location.href = href; }, 280);
+  });
+});
+
+/* Scroll Reveal */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      const siblings = Array.from(entry.target.parentElement.children).filter(el => el.classList.contains('reveal'));
+      const idx = siblings.indexOf(entry.target);
+      entry.target.style.transitionDelay = (idx * 0.07) + 's';
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 /* Theme Toggle & LocalStorage Persistence */
 const themeToggleBtn = document.getElementById('theme-toggle');

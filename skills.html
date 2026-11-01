@@ -830,6 +830,65 @@ footer {
   .edu-item { flex-direction: column; }
 }
 
+/* Page Transition Overlay */
+#page-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-main);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+#page-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+body {
+  animation: pageIn 0.35s ease forwards;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Scroll Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Nav active underline (replace old active-nav-bg approach) */
+.nav-links a {
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 13px;
+  right: 13px;
+  height: 1px;
+  background: var(--text-main);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+.nav-links a.active::after {
+  transform: scaleX(1);
+}
+.nav-links a.active {
+  color: var(--text-main);
+  background: transparent !important;
+  border-color: transparent !important;
+  font-weight: 600;
+}
+
   </style>
 </head>
 <body>
@@ -876,7 +935,7 @@ footer {
 
   <div class="subpage-hero">
     <div class="three-word-headline">ARSENAL OF CAPABILITIES</div>
-    <h1 class="page-title">Technical Arsenal &amp; Tooling</h1>
+    <h1 class="page-title">Stack &amp; Tools</h1>
     <p class="page-subtitle">
       Languages, quantitative tooling, machine learning frameworks, system utilities, and spoken communication competencies.
       (Not that I know all of these, but I work in these fields only. Always a student.)
@@ -887,7 +946,7 @@ footer {
     <div class="skills-grid">
       
       <!-- Languages -->
-      <div class="skill-box">
+      <div class="skill-box reveal">
         <div class="skill-cat">Core Languages &amp; Systems</div>
         <div class="skill-badges">
           <span class="skill-item">Python</span>
@@ -899,7 +958,7 @@ footer {
       </div>
 
       <!-- ML & Statistics -->
-      <div class="skill-box">
+      <div class="skill-box reveal">
         <div class="skill-cat">ML &amp; Statistical Modeling</div>
         <div class="skill-badges">
           <span class="skill-item">scikit-learn</span>
@@ -912,7 +971,7 @@ footer {
       </div>
 
       <!-- Applied Finance -->
-      <div class="skill-box">
+      <div class="skill-box reveal">
         <div class="skill-cat">Quantitative &amp; Backtesting</div>
         <div class="skill-badges">
           <span class="skill-item">Monte Carlo (100K+ Paths)</span>
@@ -925,7 +984,7 @@ footer {
       </div>
 
       <!-- Web & Systems Architecture -->
-      <div class="skill-box">
+      <div class="skill-box reveal">
         <div class="skill-cat">Web &amp; Systems Architecture</div>
         <div class="skill-badges">
           <span class="skill-item">FastAPI</span>
@@ -938,7 +997,7 @@ footer {
       </div>
 
       <!-- Engineering & DevOps -->
-      <div class="skill-box">
+      <div class="skill-box reveal">
         <div class="skill-cat">Engineering &amp; DevOps</div>
         <div class="skill-badges">
           <span class="skill-item">Git &amp; GitHub</span>
@@ -950,7 +1009,7 @@ footer {
       </div>
 
       <!-- Spoken Languages -->
-      <div class="skill-box">
+      <div class="skill-box reveal">
         <div class="skill-cat">Spoken Communication</div>
         <div class="skill-badges">
           <span class="skill-item">English (C2 Native/Fluent)</span>
@@ -1084,6 +1143,43 @@ if (canvas && typeof THREE !== 'undefined') {
   }
   animate();
 }
+
+/* Scroll Progress */
+const progressBar = document.getElementById('scroll-progress');
+function onScroll() {
+  const scrollY = window.scrollY;
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = maxScroll > 0 ? (scrollY / maxScroll) * 100 : 0;
+  if (progressBar) progressBar.style.width = progress + '%';
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+
+/* Page Transition */
+const overlay = document.getElementById('page-overlay');
+document.querySelectorAll('a[href]').forEach(link => {
+  const href = link.getAttribute('href');
+  if (!href || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel') || href.startsWith('#')) return;
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    overlay.classList.add('active');
+    setTimeout(() => { window.location.href = href; }, 280);
+  });
+});
+
+/* Scroll Reveal */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      const siblings = Array.from(entry.target.parentElement.children).filter(el => el.classList.contains('reveal'));
+      const idx = siblings.indexOf(entry.target);
+      entry.target.style.transitionDelay = (idx * 0.07) + 's';
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 /* Theme Toggle & LocalStorage Persistence */
 const themeToggleBtn = document.getElementById('theme-toggle');

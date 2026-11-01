@@ -830,6 +830,65 @@ footer {
   .edu-item { flex-direction: column; }
 }
 
+/* Page Transition Overlay */
+#page-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-main);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+#page-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+body {
+  animation: pageIn 0.35s ease forwards;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Scroll Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Nav active underline (replace old active-nav-bg approach) */
+.nav-links a {
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 13px;
+  right: 13px;
+  height: 1px;
+  background: var(--text-main);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+.nav-links a.active::after {
+  transform: scaleX(1);
+}
+.nav-links a.active {
+  color: var(--text-main);
+  background: transparent !important;
+  border-color: transparent !important;
+  font-weight: 600;
+}
+
   </style>
 </head>
 <body>
@@ -876,7 +935,7 @@ footer {
 
   <div class="subpage-hero">
     <div class="three-word-headline">CHANNELS OF COMMUNICATION</div>
-    <h1 class="page-title">Contact &amp; Inquiries</h1>
+    <h1 class="page-title">Get in touch</h1>
     <p class="page-subtitle">
       Open to quantitative research, algorithmic ML engineering, systems architecture, and ambitious venture collaborations.
     </p>
@@ -886,9 +945,9 @@ footer {
     <div class="contact-grid">
       
       <!-- Primary Inquiry Channels -->
-      <div class="contact-card">
+      <div class="contact-card reveal">
         <div class="three-word-headline">DIRECT · CHANNELS</div>
-        <h3 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 12px;">Get in Touch</h3>
+        <h3 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 12px;">Reach out</h3>
         <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px;">
           Feel free to reach out directly for quantitative research opportunities, venture discussions, or technical collaboration.
         </p>
@@ -917,9 +976,9 @@ footer {
       </div>
 
       <!-- Location & Profile Status -->
-      <div class="contact-card">
+      <div class="contact-card reveal">
         <div class="three-word-headline">PRESENCE · &amp; · ROLES</div>
-        <h3 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 12px;">Location &amp; Availability</h3>
+        <h3 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 12px;">Where I'm at</h3>
         
         <div style="margin-bottom: 20px;">
           <div style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); margin-bottom: 4px;">LOCATIONS</div>
@@ -1071,6 +1130,43 @@ if (canvas && typeof THREE !== 'undefined') {
   }
   animate();
 }
+
+/* Scroll Progress */
+const progressBar = document.getElementById('scroll-progress');
+function onScroll() {
+  const scrollY = window.scrollY;
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = maxScroll > 0 ? (scrollY / maxScroll) * 100 : 0;
+  if (progressBar) progressBar.style.width = progress + '%';
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+
+/* Page Transition */
+const overlay = document.getElementById('page-overlay');
+document.querySelectorAll('a[href]').forEach(link => {
+  const href = link.getAttribute('href');
+  if (!href || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel') || href.startsWith('#')) return;
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    overlay.classList.add('active');
+    setTimeout(() => { window.location.href = href; }, 280);
+  });
+});
+
+/* Scroll Reveal */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      const siblings = Array.from(entry.target.parentElement.children).filter(el => el.classList.contains('reveal'));
+      const idx = siblings.indexOf(entry.target);
+      entry.target.style.transitionDelay = (idx * 0.07) + 's';
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 /* Theme Toggle & LocalStorage Persistence */
 const themeToggleBtn = document.getElementById('theme-toggle');
