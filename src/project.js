@@ -9,6 +9,7 @@ if (!project) {
   document.title = "Project not found | Parthasarathi Adhikary";
   $("p-name").textContent = "Not found";
   $("p-summary").textContent = "That project does not exist. Go back to the list and pick one.";
+  $("p-business-wrap").hidden = true;
   $("p-stack-wrap").hidden = true;
   $("p-shots-wrap").hidden = true;
   $("p-repo").hidden = true;
@@ -18,6 +19,8 @@ if (!project) {
   $("p-name").textContent = project.name;
   $("p-name").style.viewTransitionName = `p-${slug}`;
   $("p-summary").textContent = project.summary;
+  $("p-customer").textContent = project.customer;
+  $("p-opportunity").textContent = project.opportunity;
   $("p-repo").href = project.repo;
   const keys = Object.keys(projects);
   const nextSlug = keys[(keys.indexOf(slug) + 1) % keys.length];
