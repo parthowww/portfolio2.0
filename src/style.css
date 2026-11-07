@@ -192,14 +192,19 @@ a { color: inherit; }
 .uml-section > h2 { margin: 0 0 4px; font-size: 20px; }
 .uml-note { margin: 0 0 18px; font-size: 15px; }
 .uml-frame { border: 3px solid var(--ink); background: #f8f8ec; box-shadow: 9px 9px 0 var(--alert); overflow-x: auto; }
-.uml-frame svg { display: block; width: 100%; min-width: 760px; height: auto; }
-.uml-edge { fill: none; stroke: #171717; stroke-width: 2; }
-.uml-edge-label { fill: #171717; font: 400 12px "IBM Plex Mono", ui-monospace, monospace; }
-.uml-node rect { fill: var(--ground); stroke: #111; stroke-width: 2.5; }
-.uml-node.is-actor rect { fill: #fff; }
-.uml-stereotype { fill: #4b4b4b; font: 400 11px "IBM Plex Mono", ui-monospace, monospace; }
-.uml-title { fill: #111; font: 700 16px "Space Grotesk", system-ui, sans-serif; }
-.uml-body { fill: #222; font: 400 12px "IBM Plex Mono", ui-monospace, monospace; }
+.uml-frame svg { display: block; width: 100%; min-width: 960px; height: auto; }
+.uml-lifeline { stroke: #777; stroke-width: 1.2; stroke-dasharray: 5 5; }
+.uml-call, .uml-return { stroke: #111; stroke-width: 1.6; }
+.uml-return { stroke-dasharray: 7 5; }
+.uml-participant { fill: var(--ground); stroke: #111; stroke-width: 2; }
+.uml-participant-role { fill: #555; font: 400 11px "IBM Plex Mono", ui-monospace, monospace; }
+.uml-participant-name { fill: #111; font: 700 14px "Space Grotesk", sans-serif; }
+.uml-actor { fill: none; stroke: #111; stroke-width: 2; }
+.uml-message-label-bg { fill: #f8f8ec; }
+.uml-message-label { fill: #111; font: 400 11px "IBM Plex Mono", ui-monospace, monospace; }
+.uml-fragment { fill: none; stroke: #111; stroke-width: 1.5; stroke-dasharray: 7 5; }
+.uml-fragment-label-bg { fill: #f8f8ec; stroke: #111; stroke-width: 1; }
+.uml-fragment-label { fill: #111; font: 400 11px "IBM Plex Mono", ui-monospace, monospace; }
 
 @media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }
 @media (prefers-reduced-motion: reduce) { .node { transition: none; } }

@@ -7,105 +7,62 @@ const $ = (id) => document.getElementById(id);
 const SVG_NS = "http://www.w3.org/2000/svg";
 
 const renderUml = (container, diagram) => {
-  if (!container || !diagram) return;
+  if (!container || !diagram?.participants || !diagram?.messages) return;
+  const width = 1200, top = 132, row = 52, height = top + diagram.messages.length * row + 36;
+  const centers = new Map(diagram.participants.map((p, i) => [p.id, 100 + i * (1000 / Math.max(1, diagram.participants.length - 1))]));
   const svg = document.createElementNS(SVG_NS, "svg");
-  const titleId = `uml-title-${slug}`;
-  const descId = `uml-desc-${slug}`;
-  const title = document.createElementNS(SVG_NS, "title");
-  title.id = titleId;
-  title.textContent = diagram.title || `${project.name} component diagram`;
-  const desc = document.createElementNS(SVG_NS, "desc");
-  desc.id = descId;
-  desc.textContent = `UML component diagram. Components: ${diagram.nodes.map((node) => node.title).join(", ")}. Relationships: ${diagram.edges.map((edge) => edge.label).join(", ")}.`;
-  svg.append(title, desc);
-  svg.setAttribute("viewBox", `0 0 ${diagram.width} ${diagram.height}`);
+  const titleId = `uml-title-${slug}`, descId = `uml-desc-${slug}`;
+  const make = (tag, attrs = {}, content = null) => {
+    const el = document.createElementNS(SVG_NS, tag);
+    Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
+    if (content !== null) el.textContent = content;
+    return el;
+  };
+  svg.append(make("title", { id: titleId }, `${project.name} sequence diagram`),
+    make("desc", { id: descId }, `Interactions between ${diagram.participants.map((p) => p.name).join(", ")}.`));
+  svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
   svg.setAttribute("role", "img");
   svg.setAttribute("aria-labelledby", `${titleId} ${descId}`);
-
-  const defs = document.createElementNS(SVG_NS, "defs");
-  const marker = document.createElementNS(SVG_NS, "marker");
-  marker.id = `uml-arrow-${slug}`;
-  marker.setAttribute("viewBox", "0 0 10 10");
-  marker.setAttribute("refX", "9");
-  marker.setAttribute("refY", "5");
-  marker.setAttribute("markerWidth", "7");
-  marker.setAttribute("markerHeight", "7");
-  marker.setAttribute("orient", "auto-start-reverse");
-  const arrow = document.createElementNS(SVG_NS, "path");
-  arrow.setAttribute("d", "M 0 0 L 10 5 L 0 10 z");
-  arrow.setAttribute("fill", "#111");
-  marker.appendChild(arrow);
-  defs.appendChild(marker);
-  svg.appendChild(defs);
-
-  const byId = new Map(diagram.nodes.map((node) => [node.id, node]));
-  diagram.edges.forEach((edge) => {
-    const from = byId.get(edge.from);
-    const to = byId.get(edge.to);
-    if (!from || !to) return;
-    const points = edge.points || (() => {
-      const fx = from.x + from.w / 2;
-      const fy = from.y + from.h / 2;
-      const tx = to.x + to.w / 2;
-      const ty = to.y + to.h / 2;
-      if (Math.abs(tx - fx) >= Math.abs(ty - fy)) {
-        const sx = tx >= fx ? from.x + from.w : from.x;
-        const ex = tx >= fx ? to.x : to.x + to.w;
-        return [[sx, fy], [ex, ty]];
-      }
-      const sy = ty >= fy ? from.y + from.h : from.y;
-      const ey = ty >= fy ? to.y : to.y + to.h;
-      return [[fx, sy], [tx, ey]];
-    })();
-    const path = document.createElementNS(SVG_NS, "polyline");
-    path.setAttribute("class", "uml-edge");
-    path.setAttribute("points", points.map((point) => point.join(",")).join(" "));
-    path.setAttribute("marker-end", `url(#uml-arrow-${slug})`);
-    svg.appendChild(path);
-    if (edge.label) {
-      const segment = Math.max(0, Math.floor((points.length - 1) / 2));
-      const a = points[segment];
-      const b = points[segment + 1];
-      const label = document.createElementNS(SVG_NS, "text");
-      label.setAttribute("class", "uml-edge-label");
-      label.setAttribute("x", edge.labelX ?? ((a[0] + b[0]) / 2));
-      label.setAttribute("y", edge.labelY ?? ((a[1] + b[1]) / 2 - 7));
-      label.setAttribute("text-anchor", "middle");
-      label.textContent = edge.label;
-      svg.appendChild(label);
+  const defs = make("defs");
+  for (const [kind, d, fill] of [["call", "M 0 0 L 10 5 L 0 10 z", "#111"], ["return", "M 1 1 L 9 5 L 1 9", "none"]]) {
+    const marker = make("marker", { id: `uml-${kind}-${slug}`, viewBox: "0 0 10 10", refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: "auto" });
+    marker.append(make("path", { d, fill, stroke: "#111", "stroke-width": 1.5 }));
+    defs.append(marker);
+  }
+  svg.append(defs);
+  const add = (tag, attrs, content) => svg.append(make(tag, attrs, content));
+  if (diagram.fragment) {
+    const f = diagram.fragment, y = top + f.from * row - 20, h = (f.to - f.from + 1) * row + 26;
+    add("rect", { x: 18, y, width: width - 36, height: h, class: "uml-fragment" });
+    add("rect", { x: 18, y, width: 230, height: 25, class: "uml-fragment-label-bg" });
+    add("text", { x: 28, y: y + 17, class: "uml-fragment-label" }, `loop [${f.label}]`);
+  }
+  diagram.participants.forEach((p) => {
+    const x = centers.get(p.id);
+    add("line", { x1: x, y1: 108, x2: x, y2: height - 18, class: "uml-lifeline" });
+    if (p.type === "actor") {
+      add("circle", { cx: x, cy: 39, r: 9, class: "uml-actor" });
+      add("line", { x1: x, y1: 48, x2: x, y2: 71, class: "uml-actor" });
+      add("line", { x1: x - 13, y1: 56, x2: x + 13, y2: 56, class: "uml-actor" });
+      add("line", { x1: x, y1: 71, x2: x - 11, y2: 84, class: "uml-actor" });
+      add("line", { x1: x, y1: 71, x2: x + 11, y2: 84, class: "uml-actor" });
+      add("text", { x, y: 103, class: "uml-participant-name", "text-anchor": "middle" }, p.name);
+    } else {
+      add("rect", { x: x - 84, y: 18, width: 168, height: 78, rx: 2, class: "uml-participant" });
+      add("text", { x, y: 43, class: "uml-participant-role", "text-anchor": "middle" }, p.role || "component");
+      add("text", { x, y: 69, class: "uml-participant-name", "text-anchor": "middle" }, p.name);
     }
   });
-
-  diagram.nodes.forEach((node) => {
-    const group = document.createElementNS(SVG_NS, "g");
-    group.setAttribute("class", `uml-node${node.kind === "actor" ? " is-actor" : ""}`);
-    const rect = document.createElementNS(SVG_NS, "rect");
-    rect.setAttribute("x", node.x);
-    rect.setAttribute("y", node.y);
-    rect.setAttribute("width", node.w);
-    rect.setAttribute("height", node.h);
-    group.appendChild(rect);
-    const stereotype = document.createElementNS(SVG_NS, "text");
-    stereotype.setAttribute("class", "uml-stereotype");
-    stereotype.setAttribute("x", node.x + 12);
-    stereotype.setAttribute("y", node.y + 20);
-    stereotype.textContent = node.kind === "actor" ? "«actor»" : "«component»";
-    group.appendChild(stereotype);
-    const heading = document.createElementNS(SVG_NS, "text");
-    heading.setAttribute("class", "uml-title");
-    heading.setAttribute("x", node.x + 12);
-    heading.setAttribute("y", node.y + 43);
-    heading.textContent = node.title;
-    group.appendChild(heading);
-    (node.body || []).forEach((line, index) => {
-      const body = document.createElementNS(SVG_NS, "text");
-      body.setAttribute("class", "uml-body");
-      body.setAttribute("x", node.x + 12);
-      body.setAttribute("y", node.y + 63 + index * 16);
-      body.textContent = line;
-      group.appendChild(body);
-    });
-    svg.appendChild(group);
+  diagram.messages.forEach((m, i) => {
+    const y = top + i * row, x1 = centers.get(m.from), x2 = centers.get(m.to);
+    if (x1 == null || x2 == null) return;
+    const isReturn = m.type === "return";
+    add("line", { x1: x1 + (x2 > x1 ? 3 : -3), y1: y, x2: x2 - (x2 > x1 ? 3 : -3), y2: y,
+      class: isReturn ? "uml-return" : "uml-call", "marker-end": `url(#uml-${isReturn ? "return" : "call"}-${slug})` });
+    const label = `${i + 1}. ${m.label}${m.guard ? ` [${m.guard}]` : ""}`;
+    const labelWidth = Math.min(440, Math.max(92, label.length * 7.2 + 16)), mid = (x1 + x2) / 2;
+    add("rect", { x: mid - labelWidth / 2, y: y - 17, width: labelWidth, height: 19, class: "uml-message-label-bg" });
+    add("text", { x: mid, y: y - 4, class: "uml-message-label", "text-anchor": "middle" }, label);
   });
   container.replaceChildren(svg);
 };
