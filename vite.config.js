@@ -6,6 +6,7 @@ export default defineConfig({
       input: {
         main: "index.html",
         project: "project.html",
+        about: "about.html",
       },
     },
   },
