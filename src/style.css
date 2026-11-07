@@ -107,6 +107,24 @@ a { color: inherit; }
 .detail-name { margin: 40px 0 28px; font-size: clamp(48px, 11vw, 150px); line-height: .88; font-weight: 700; letter-spacing: -.045em; text-transform: uppercase; overflow-wrap: anywhere; }
 .lede { max-width: 40rem; margin: 0 0 56px; font-size: clamp(20px, 2.2vw, 26px); line-height: 1.35; }
 .about-page { max-width: 1280px; margin: 0 auto; padding: 0 var(--pad) 80px; }
+.about-page .eyebrow { margin-top: 72px; }
+.about-page .name { margin-top: 28px; }
+.about-page .intro { margin-bottom: 0; }
+.about-page .about-lede { max-width: 34rem; font-size: clamp(18px, 1.8vw, 22px); line-height: 1.35; background: var(--ground); padding: 6px 0; }
+.about-page .about-node { width: min(540px, 100%); }
+.about-page .about-node h2 { margin: 8px 0 0; color: var(--ground); font-size: clamp(28px, 4vw, 44px); line-height: .95; font-weight: 700; letter-spacing: -.04em; text-transform: uppercase; }
+.about-page .about-node .t { margin: 0; padding: 0; background: none; }
+.profile-copy { position: relative; z-index: 1; max-width: 860px; margin: 18px 0 0; padding: 8px 0; background: var(--ground); }
+.about-page .profile-section { margin-bottom: 86px; }
+.about-page .profile-section > .about-node { margin-bottom: 0; }
+.about-page .node .metrics { border-color: #555; }
+.about-page .node .metrics div { border-color: #555; }
+.about-page .node .metrics dt { color: #fff; }
+.about-page .node .metrics dd { color: var(--ground); }
+.about-page .node .education-card { border-color: #555; }
+.about-page .node .education-card p { color: #fff; }
+.about-page .node .experience-card { background: #111; }
+.about-page .profile-contact { position: relative; z-index: 1; }
 .eyebrow, .mono { font: 400 12px/1.5 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: .08em; }
 .eyebrow { margin: 72px 0 0; }
 .about-page .detail-name { margin-top: 12px; }
@@ -166,6 +184,9 @@ a { color: inherit; }
   .metrics div { padding: 14px 10px; }
   .metrics dd { font-size: 22px; }
   .toolkit > div { grid-template-columns: 1fr; gap: 5px; }
+  .about-page .profile-section { margin-bottom: 66px; }
+  .about-page .node--a, .about-page .node--b { margin-left: 44px; width: auto; }
+  .profile-copy { margin-top: 14px; }
 }
 .uml-section { max-width: 960px; margin: 0 0 64px; }
 .uml-section > h2 { margin: 0 0 4px; font-size: 20px; }

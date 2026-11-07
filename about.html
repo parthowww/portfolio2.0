@@ -6,6 +6,7 @@
 <title>About | Parthasarathi Adhikary</title>
 <meta name="description" content="About Parthasarathi Adhikary: computer science student at SRMIST, building machine learning pipelines and quantitative systems for finance.">
 <meta name="theme-color" content="#F2F542">
+<script>document.documentElement.className += " js";</script>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/src/style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,30 +14,52 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<main class="about-page">
+<div class="stage about-page" data-stage>
+<div class="field" aria-hidden="true">
+<svg id="ghosts" focusable="false"></svg>
+<svg id="trail" focusable="false"></svg>
+<svg id="nodes" focusable="false"></svg>
+<span id="head" class="head"><span class="head-t"></span></span>
+</div>
+<div id="ghost-tip" class="tip" hidden></div>
+
+<header class="top about-top">
 <nav class="nav" aria-label="Main">
 <a class="pill" href="/#work">Work</a>
 <a class="pill" href="#profile">About</a>
 <a class="pill" href="#contact">Contact</a>
 </nav>
-
 <p class="eyebrow">PROFILE / 2026</p>
-<h1 class="detail-name">Parthasarathi<br>Adhikary</h1>
-<p class="lede">I build things at the intersection of machine learning and market behavior, then check my own work hard enough to find the bug before someone else does.</p>
+<h1 class="name"><span>Parthasarathi</span><span>Adhikary</span></h1>
+<div class="intro">
+<p class="about-lede">I build things at the intersection of machine learning and market behavior, then check my own work hard enough to find the bug before someone else does.</p>
+<p class="start" data-start><span class="t">t = 0</span></p>
+</div>
 <div class="actions about-actions">
 <a class="repo" href="/resume.pdf" target="_blank" rel="noopener">Open résumé (PDF)</a>
 <a class="next" href="/resume.pdf" download="Parthasarathi-Adhikary-Resume.pdf">Download résumé</a>
 <a class="next" href="/#work">Explore projects</a>
 </div>
+</header>
 
+<main>
 <section class="profile-section" id="profile" aria-labelledby="profile-h">
+<div class="node about-node node--a" data-node="left">
+<p class="t">t = 1</p>
 <h2 id="profile-h">Profile</h2>
+</div>
+<div class="profile-copy" data-reveal>
 <p class="profile-lede">I’m a second-year Computer Science Engineering student at SRM Institute of Science and Technology in Chennai. My focus is quantitative finance and applied machine learning: building models and product prototypes, then validating the assumptions behind them.</p>
 <p>My project work ranges from a behavioral micro-investing simulator to financial spend-audit tools and service telemetry. I’m a founding-team member at <a href="https://github.com/xenodochy-com" target="_blank" rel="noopener">Xenodochy</a>, an early-stage holding-company concept, and contributed backend development and business strategy to Safara for Smart India Hackathon 2026.</p>
+</div>
 </section>
 
 <section class="profile-section" aria-labelledby="education-h">
+<div class="node about-node node--b" data-node="right">
+<p class="t">t = 2</p>
 <h2 id="education-h">Education</h2>
+</div>
+<div class="profile-copy" data-reveal>
 <div class="education-card">
 <div>
 <h3>B.Tech, Computer Science Engineering</h3>
@@ -56,10 +79,15 @@
 </div>
 <p class="mono">2023–2025</p>
 </div>
+</div>
 </section>
 
 <section class="profile-section" aria-labelledby="experience-h">
+<div class="node about-node node--a" data-node="left">
+<p class="t">t = 3</p>
 <h2 id="experience-h">Selected experience</h2>
+</div>
+<div class="profile-copy" data-reveal>
 <article class="experience-card">
 <p class="mono">FOUNDING TEAM · XENODOCHY · IN PROGRESS</p>
 <h3>Founding-team member</h3>
@@ -70,11 +98,15 @@
 <h3>Tourist safety system</h3>
 <p>Contributed backend development and business strategy for a tourist-safety prototype using DID-based identity, geofencing alerts, and a blockchain audit trail. Also worked on the PWA operator dashboard.</p>
 </article>
+</div>
 </section>
 
 <section class="profile-section" aria-labelledby="approach-h">
+<div class="node about-node node--b" data-node="right">
+<p class="t">t = 4</p>
 <h2 id="approach-h">How I work</h2>
-<div class="principles-grid">
+</div>
+<div class="profile-copy principles-grid" data-reveal>
 <article><h3>Control data leakage</h3><p>Use group-aware and out-of-time validation where the data calls for it; keep preprocessing fitted within each training fold.</p></article>
 <article><h3>Test stochastic systems</h3><p>Use Monte Carlo simulation to examine behavior across many paths before trusting a single outcome.</p></article>
 <article><h3>Explain the result</h3><p>Prefer interpretable evidence and reproducible calculations, especially when a model affects a financial decision.</p></article>
@@ -82,7 +114,11 @@
 </section>
 
 <section class="profile-section" aria-labelledby="toolkit-h">
+<div class="node about-node node--a" data-node="left">
+<p class="t">t = 5</p>
 <h2 id="toolkit-h">Toolkit</h2>
+</div>
+<div class="profile-copy" data-reveal>
 <dl class="toolkit">
 <div><dt>Languages</dt><dd>Python, C, C++, Node.js, TypeScript, SQL</dd></div>
 <div><dt>Machine learning</dt><dd>scikit-learn, XGBoost, LightGBM, ensemble methods, probability and statistics</dd></div>
@@ -90,11 +126,15 @@
 <div><dt>Web &amp; data</dt><dd>FastAPI, Express.js, Next.js, Supabase, Streamlit, SQLite</dd></div>
 <div><dt>Design &amp; tools</dt><dd>UI/UX, Figma, Git, Linux, Docker, Google AI Studio</dd></div>
 </dl>
+</div>
 </section>
 
 <section class="profile-section" aria-labelledby="learning-h">
+<div class="node about-node node--b" data-node="right">
+<p class="t">t = 6</p>
 <h2 id="learning-h">Coursework &amp; learning</h2>
-<ul class="learning-list">
+</div>
+<ul class="learning-list profile-copy" data-reveal>
 <li>Probability &amp; Statistics for Machine Learning and Data Science · DeepLearning.AI</li>
 <li>Introduction to Artificial Intelligence · IBM SkillsBuild</li>
 <li>Python using AI · AI for Techies</li>
@@ -103,7 +143,8 @@
 </ul>
 </section>
 
-<footer class="profile-contact" id="contact">
+<footer class="profile-contact contact" id="contact" data-reveal>
+<span class="end" data-end aria-hidden="true"></span>
 <h2>Contact</h2>
 <p>Open to internships and analyst-track roles in investment banking and quantitative research.</p>
 <div class="links">
@@ -114,5 +155,7 @@
 <p class="fine">Kolkata and Chennai, India</p>
 </footer>
 </main>
+</div>
+<script type="module" src="/src/main.js"></script>
 </body>
 </html>
